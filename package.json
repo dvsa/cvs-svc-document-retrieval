@@ -1,0 +1,97 @@
+{
+  "name": "cvs-svc-document-retrieval",
+  "version": "1.0.0",
+  "description": "Microservice that retrieves documents",
+  "main": "handler.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dvsa/cvs-document-retrieval.git"
+  },
+  "engines": {
+    "node": "10.18.1",
+    "npm": "5.6.0"
+  },
+  "scripts": {
+    "start": "BRANCH=local SLS_DEBUG=* serverless offline start",
+    "start:test": "npm run tslint && SLS_DEBUG=* BRANCH=local node_modules/gulp/bin/gulp.js start-serverless",
+    "end:test": "node_modules/gulp/bin/gulp.js kill-serverless",
+    "debug": "export SLS_DEBUG=* && BRANCH=local node --inspect ./node_modules/serverless/bin/serverless offline start",
+    "build": "node_modules/typescript/bin/tsc --rootDir ./ --outDir .build --sourceMap false && npm run build:copy",
+    "build:copy": "find src -type f \\( -name \"*.yml\" -or -name \"*.json\" \\) | cpio -pdm .build && find tests -type f \\( -name \"*.yml\" -or -name \"*.json\" \\)  | cpio -pdm .build",
+    "test": "BRANCH=local SLS_DEBUG=* AWS_XRAY_CONTEXT_MISSING=LOG_ERROR jest --testMatch=\"**/*.unitTest.ts\" --coverage",
+    "test-i": "BRANCH=local jest --testMatch=\"**/*.intTest.ts\" --runInBand",
+    "dynamodb": "sls dynamodb start",
+    "prepush": "BRANCH=local npm test && npm run tslint",
+    "predeploy": "npm install && npm run prepush",
+    "tslint": "tslint src/**/*.ts tests/**/*.ts -q",
+    "sonar-scanner": "AWS_XRAY_CONTEXT_MISSING=LOG_ERROR npm run tslint && AWS_XRAY_CONTEXT_MISSING=LOG_ERROR npm run coverage && sonar-scanner",
+    "coverage": "BRANCH=local SLS_DEBUG=* jest --testMatch=\"**/*.*Test.ts\" --runInBand --coverage",
+    "audit-dep": "npm audit --json | node_modules/.bin/audit-filter --nsp-config=.nsprc --audit=-",
+    "package": "mkdir ${ZIP_NAME} && cp package.json package-lock.json ${ZIP_NAME}/ && cp -r .build/src/* ${ZIP_NAME}/ && cd ${ZIP_NAME} && npm ci --production && rm package.json package-lock.json && zip -qr ../${ZIP_NAME}.zip .",
+    "security-checks": "npm audit --audit-level=critical && git secrets --register-aws && git secrets --scan && git log -p | scanrepo",
+    "tools-setup": "echo 'nothing to do'"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
+    "@babel/preset-typescript": "^7.6.0",
+    "@types/jest": "^24.0.19",
+    "@types/jest-plugin-context": "^2.9.2",
+    "@types/joi": "^14.3.3",
+    "@types/lambda-tester": "^3.5.1",
+    "@types/lodash": "^4.14.142",
+    "@types/node": "^12.11.2",
+    "@types/request": "^2.48.1",
+    "@types/supertest": "^2.0.8",
+    "audit-filter": "^0.5.0",
+    "aws-lambda-mock-context": "^3.2.1",
+    "babel-jest": "^24.9.0",
+    "gulp": "^4.0.2",
+    "husky": "^3.0.8",
+    "jest": "^24.9.0",
+    "jest-cucumber": "^2.0.11",
+    "jest-plugin-context": "^2.9.0",
+    "jest-sonar-reporter": "^2.0.0",
+    "lambda-tester": "^3.6.0",
+    "lodash": "^4.17.19",
+    "serverless": "^2.24.0",
+    "serverless-dynamodb-local": "^0.2.38",
+    "serverless-offline": "5.12.0",
+    "serverless-plugin-tracing": "^2.0.0",
+    "serverless-plugin-typescript": "^1.1.9",
+    "standard": "^14.3.1",
+    "supertest": "4.0.2",
+    "ts-jest": "^26.1.1",
+    "ts-node": "^8.4.1",
+    "tslint": "^5.20.0",
+    "tslint-jsdoc-rules": "^0.2.0",
+    "typescript": "3.6.4"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.553.0",
+    "aws-xray-sdk": "^2.4.0",
+    "joi": "^14.3.1",
+    "node-yaml": "^3.2.0",
+    "path-parser": "^4.2.0",
+    "reflect-metadata": "^0.1.13"
+  },
+  "jestSonar": {
+    "reportPath": ".reports",
+    "reportFile": "test-report.xml",
+    "indent": 4
+  },
+  "jest": {
+    "coverageDirectory": "./coverage",
+    "collectCoverage": true,
+    "testResultsProcessor": "jest-sonar-reporter",
+    "testURL": "http://localhost"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run prepush && npm run security-checks",
+      "pre-push": "npm run prepush"
+    }
+  }
+}

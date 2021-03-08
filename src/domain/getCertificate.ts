@@ -22,15 +22,12 @@ export default async (
     if (!bucketName) {
       throw new MissingBucketNameError();
     }
-    // Basic validation as per template
-    // Advanced validation (VIN/chassis number, cert number)
+
     validate(event);
 
-    // Retrieve file from S3
     const file = await getObjectFromS3(s3, bucketName, event.certificateNumber, event.vin);
-    // Encode response
     const response = encode(file);
-    // Return response
+
     return {
       headers: { 'Content-Type': 'application/pdf' },
       statusCode: 200,
@@ -40,6 +37,7 @@ export default async (
   } catch (e) {
     let code = 500;
     let message = '';
+
     // Split into 50x and 40x errors.
     if (e instanceof NoBodyError || e instanceof MissingBucketNameError) {
       message = e.message;

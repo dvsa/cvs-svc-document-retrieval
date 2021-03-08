@@ -2,11 +2,6 @@ import { S3 } from 'aws-sdk';
 import getFromS3 from '../../../../src/infrastructure/s3/s3Service';
 
 describe('S3 Service', () => {
-  beforeAll(async (done) => {
-    // get requires env vars
-    await done();
-  });
-
   it('passes the expected key to getObject', async () => {
     const mockS3 = ({} as unknown) as S3;
     const bucket = 'bucket';

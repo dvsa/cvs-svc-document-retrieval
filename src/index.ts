@@ -6,20 +6,10 @@ import { app } from './infrastructure/api';
 
 import { createMajorVersionNumber, createHandlerBasePath } from './utils';
 
-const {
-  NODE_ENV, API_VERSION, AWS_PROVIDER_REGION, AWS_PROVIDER_STAGE,
-} = process.env;
+const { API_VERSION } = process.env;
 
-console.log(
-  `\nRunning Service\n version: '${API_VERSION}'\n mode: ${NODE_ENV}\n stage: '${AWS_PROVIDER_STAGE}'\n region: '${AWS_PROVIDER_REGION}'\n\n`,
-);
-
-const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyStructuredResultV2> => {
-  console.log('event');
-  console.log(JSON.stringify(event, null, 2));
-
-  return serverless(app, {
-    /**
+const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyStructuredResultV2> => serverless(app, {
+  /**
      * We proxy requests from / as <stage> is handled in APIG when we deploy.
      * With with serverless-offline we proxy requests from /v<x> from the client -
      * The package.json version as single source of truth to be the app basePath with stage
@@ -42,9 +32,8 @@ const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGat
      *
      * We use express Router to proxy redirect requests from /v<x>/
      */
-    // basePath: `${AWS_PROVIDER_STAGE}/${MAJOR_VERSION}`,
-    basePath: createHandlerBasePath(createMajorVersionNumber(API_VERSION)),
-  })(event, context);
-};
+  // basePath: `${AWS_PROVIDER_STAGE}/${MAJOR_VERSION}`,
+  basePath: createHandlerBasePath(createMajorVersionNumber(API_VERSION)),
+})(event, context);
 
 export { handler };

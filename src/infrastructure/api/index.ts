@@ -6,7 +6,7 @@ const app = express();
 
 const router = express.Router();
 
-const { API_VERSION } = process.env;
+const { API_VERSION, Bucket } = process.env;
 
 // Declare middlewares
 /**
@@ -22,7 +22,7 @@ const { API_VERSION } = process.env;
  * next()
  * })
  */
-app.use((_, __, next) => {
+app.use((_request, _response, next) => {
   // TODO Add logger lib like Winston or Morgan
   next();
 });
@@ -30,17 +30,17 @@ app.use((_, __, next) => {
 /**
  * Define routing and route level middleware if necessary from ./routes
  */
-router.post('/', (_, res, next) => {
+router.post('/', (_request, res, next) => {
   res.send('Hello World!');
   next();
 });
 
 // Debug router before we start proxying  requests from /v<x> psth
-app.get('/', (_, res) => {
+app.get('/', (_request, res) => {
   res.send({ ok: true });
 });
 
-app.get('/version', (_, res) => {
+app.get('/version', (_request, res) => {
   res.send({ version: API_VERSION });
 });
 
@@ -57,7 +57,7 @@ app.get('/document-retrieval', (req: Request, res: Response) => {
       certificateNumber: req.query.certificateNumber as string,
     },
     new S3(),
-    process.env.Bucket,
+    Bucket,
   )
     .then((responseDetails) => {
       res.status(responseDetails.statusCode);

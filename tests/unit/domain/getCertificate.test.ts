@@ -5,6 +5,7 @@ import NoBodyError from '../../../src/errors/NoBodyError';
 import VinError from '../../../src/errors/VinError';
 import CertificateDetails from '../../../src/interfaces/CertificateDetails';
 import getCertificate from '../../../src/domain/getCertificate';
+import IncorrectFileTypeError from '../../../src/errors/IncorrectFileTypeError';
 
 describe('Certificate Service', () => {
   it('returns an internal server error if the bucket is undefined', async () => {
@@ -41,7 +42,7 @@ describe('Certificate Service', () => {
 
   it('returns an internal server error if there is no Body in the S3 request', async () => {
     const mockS3 = ({} as unknown) as S3;
-    const mockPromise = jest.fn().mockReturnValue(Promise.resolve({}));
+    const mockPromise = jest.fn().mockReturnValue(Promise.resolve({ ContentType: 'application/pdf' }));
     const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
 
     mockS3.getObject = mockGetObject;
@@ -54,6 +55,26 @@ describe('Certificate Service', () => {
     const error = new NoBodyError();
 
     expect(response.statusCode).toEqual(500);
+    expect(response.body).toEqual(error.message);
+  });
+
+  it('returns an 404 if the stored file is not a PDF', async () => {
+    const mockS3 = ({} as unknown) as S3;
+    const mockPromise = jest
+      .fn()
+      .mockReturnValue(Promise.resolve({ Body: 'This is an image', ContentType: 'image/jpg' }));
+    const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
+
+    mockS3.getObject = mockGetObject;
+
+    const event: CertificateDetails = {
+      certificateNumber: 'W10I02544',
+      vin: 'JN21AAZ34U0200098',
+    };
+    const response = await getCertificate(event, mockS3, 'bucket');
+    const error = new IncorrectFileTypeError();
+
+    expect(response.statusCode).toEqual(404);
     expect(response.body).toEqual(error.message);
   });
 
@@ -93,7 +114,9 @@ describe('Certificate Service', () => {
 
   it('returns a successful response if everything works', async () => {
     const mockS3 = ({} as unknown) as S3;
-    const mockPromise = jest.fn().mockReturnValue(Promise.resolve({ Body: 'Certificate Content' }));
+    const mockPromise = jest
+      .fn()
+      .mockReturnValue(Promise.resolve({ Body: 'Certificate Content', ContentType: 'application/pdf' }));
     const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
 
     mockS3.getObject = mockGetObject;

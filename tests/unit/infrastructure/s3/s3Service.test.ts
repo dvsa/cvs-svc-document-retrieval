@@ -7,7 +7,9 @@ describe('S3 Service', () => {
     const bucket = 'bucket';
     const certNumber = 'cert123456';
     const vin = 'VIN2345AB';
-    const mockPromise = jest.fn().mockReturnValue(Promise.resolve({ Body: 'Success!' }));
+    const mockPromise = jest
+      .fn()
+      .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/pdf' }));
     const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
 
     mockS3.getObject = mockGetObject;
@@ -24,7 +26,9 @@ describe('S3 Service', () => {
     const bucket = 'bucket';
     const certNumber = 'cert123456';
     const vin = 'VIN2345AB';
-    const mockPromise = jest.fn().mockReturnValue(Promise.resolve({ Body: 'Success!' }));
+    const mockPromise = jest
+      .fn()
+      .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/pdf' }));
     const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
 
     mockS3.getObject = mockGetObject;
@@ -41,7 +45,9 @@ describe('S3 Service', () => {
     const bucket = 'bucket';
     const certNumber = 'cert123456';
     const vin = 'VIN2345AB';
-    const mockPromise = jest.fn().mockReturnValue(Promise.resolve({ Body: 'Success!' }));
+    const mockPromise = jest
+      .fn()
+      .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/pdf' }));
     const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
 
     mockS3.getObject = mockGetObject;
@@ -49,12 +55,25 @@ describe('S3 Service', () => {
     expect(await getFromS3(mockS3, bucket, certNumber, vin)).toEqual('Success!');
   });
 
+  it('throws an error if te response is not a PDF', async () => {
+    const mockS3 = ({} as unknown) as S3;
+    const bucket = 'bucket';
+    const certNumber = 'cert123456';
+    const vin = 'VIN2345AB';
+    const mockPromise = jest.fn().mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'image/jpg' }));
+    const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
+
+    mockS3.getObject = mockGetObject;
+
+    await expect(getFromS3(mockS3, bucket, certNumber, vin)).rejects.toThrow();
+  });
+
   it('throws an error if there is no body in the response', async () => {
     const mockS3 = ({} as unknown) as S3;
     const bucket = 'bucket';
     const certNumber = 'cert123456';
     const vin = 'VIN2345AB';
-    const mockPromise = jest.fn().mockReturnValue(Promise.resolve({}));
+    const mockPromise = jest.fn().mockReturnValue(Promise.resolve({ ContentType: 'application/pdf' }));
     const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
 
     mockS3.getObject = mockGetObject;

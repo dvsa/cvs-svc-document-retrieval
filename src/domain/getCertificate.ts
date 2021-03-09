@@ -8,6 +8,7 @@ import NoBodyError from '../errors/NoBodyError';
 import CertificateNumberError from '../errors/CertificateNumberError';
 import VinError from '../errors/VinError';
 import MissingBucketNameError from '../errors/MissingBucketNameError';
+import IncorrectFileTypeError from '../errors/IncorrectFileTypeError';
 
 function isAWSError(error: Error | AWSError): error is AWSError {
   return Object.prototype.hasOwnProperty.call(error, 'code') as boolean;
@@ -45,6 +46,11 @@ export default async (
 
     if (e instanceof VinError || e instanceof CertificateNumberError) {
       code = 400;
+      message = e.message;
+    }
+
+    if (e instanceof IncorrectFileTypeError) {
+      code = 404;
       message = e.message;
     }
 

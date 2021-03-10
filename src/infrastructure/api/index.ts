@@ -69,6 +69,7 @@ app.get('/document-retrieval', (req: Request, res: Response) => {
       res.send(responseDetails.body);
     })
     .catch((e: Error) => {
+      console.error(e.message);
       res.status(500).send(e.message);
     });
 });

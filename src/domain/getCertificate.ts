@@ -64,6 +64,9 @@ export default async (
       message = e.code;
     }
 
+    console.error(code);
+    console.error(message);
+
     return {
       statusCode: code,
       body: message,

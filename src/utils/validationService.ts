@@ -10,7 +10,7 @@ const certRegex = /^[a-z-A-Z]\d{2}[a-z-A-Z]\d{5}$/;
 const vinRegex = /^[a-hA-Hj-nJ-NpPr-zR-Z\d]{13}\d{4}$/;
 
 export default (event: CertificateDetails): boolean => {
-  if (!event.certificateNumber || !certRegex.exec(event.certificateNumber)) {
+  if (!event.testNumber || !certRegex.exec(event.testNumber)) {
     throw new CertificateNumberError();
   }
 

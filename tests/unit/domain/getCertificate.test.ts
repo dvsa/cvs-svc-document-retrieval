@@ -18,7 +18,7 @@ describe('Certificate Service', () => {
 
   it('returns a bad request if the certificate number is invalid', async () => {
     const event: CertificateDetails = {
-      certificateNumber: 'this is invalid',
+      testNumber: 'this is invalid',
       vin: 'JN21AAZ34U0200098',
     };
     const response = await getCertificate(event, ({} as unknown) as S3, 'bucket');
@@ -30,7 +30,7 @@ describe('Certificate Service', () => {
 
   it('returns a bad request if the VIN is invalid', async () => {
     const event: CertificateDetails = {
-      certificateNumber: 'W10I02544',
+      testNumber: 'W10I02544',
       vin: 'this is invalid',
     };
     const response = await getCertificate(event, ({} as unknown) as S3, 'bucket');
@@ -48,7 +48,7 @@ describe('Certificate Service', () => {
     mockS3.getObject = mockGetObject;
 
     const event: CertificateDetails = {
-      certificateNumber: 'W10I02544',
+      testNumber: 'W10I02544',
       vin: 'JN21AAZ34U0200098',
     };
     const response = await getCertificate(event, mockS3, 'bucket');
@@ -68,7 +68,7 @@ describe('Certificate Service', () => {
     mockS3.getObject = mockGetObject;
 
     const event: CertificateDetails = {
-      certificateNumber: 'W10I02544',
+      testNumber: 'W10I02544',
       vin: 'JN21AAZ34U0200098',
     };
     const response = await getCertificate(event, mockS3, 'bucket');
@@ -86,7 +86,7 @@ describe('Certificate Service', () => {
     mockS3.getObject = mockGetObject;
 
     const event: CertificateDetails = {
-      certificateNumber: 'W10I02544',
+      testNumber: 'W10I02544',
       vin: 'JN21AAZ34U0200098',
     };
     const response = await getCertificate(event, mockS3, 'bucket');
@@ -103,7 +103,7 @@ describe('Certificate Service', () => {
     mockS3.getObject = mockGetObject;
 
     const event: CertificateDetails = {
-      certificateNumber: 'W10I02544',
+      testNumber: 'W10I02544',
       vin: 'JN21AAZ34U0200098',
     };
     const response = await getCertificate(event, mockS3, 'bucket');
@@ -122,7 +122,7 @@ describe('Certificate Service', () => {
     mockS3.getObject = mockGetObject;
 
     const event: CertificateDetails = {
-      certificateNumber: 'W10I02544',
+      testNumber: 'W10I02544',
       vin: 'JN21AAZ34U0200098',
     };
     const response = await getCertificate(event, mockS3, 'bucket');

@@ -26,7 +26,7 @@ export default async (
 
     validate(event);
 
-    const file = await getObjectFromS3(s3, bucketName, event.certificateNumber, event.vin);
+    const file = await getObjectFromS3(s3, bucketName, event.testNumber, event.vin);
     const response = encode(file);
 
     return {

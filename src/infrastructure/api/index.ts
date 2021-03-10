@@ -45,7 +45,7 @@ app.get('/version', (_request, res) => {
 });
 
 app.get('/document-retrieval', (req: Request, res: Response) => {
-  if (!req.query.vinNumber || !req.query.certificateNumber) {
+  if (!req.query.vinNumber || !req.query.testNumber) {
     res.status(400).end();
 
     return;
@@ -54,7 +54,7 @@ app.get('/document-retrieval', (req: Request, res: Response) => {
   getCertificate(
     {
       vin: req.query.vinNumber as string,
-      certificateNumber: req.query.certificateNumber as string,
+      testNumber: req.query.testNumber as string,
     },
     new S3(),
     Bucket,

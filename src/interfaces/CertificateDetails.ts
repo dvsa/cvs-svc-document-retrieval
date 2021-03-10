@@ -1,4 +1,4 @@
 export default interface CertificateDetails {
-  certificateNumber: string;
+  testNumber: string;
   vin: string;
 }

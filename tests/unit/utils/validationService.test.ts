@@ -4,7 +4,7 @@ import validator from '../../../src/utils/validationService';
 describe('Validation service', () => {
   it('should pass a valid certificate and VIN', () => {
     const event: CertificateDetails = {
-      certificateNumber: 'W05Q79998',
+      testNumber: 'W05Q79998',
       vin: 'JL12AAZ34U0300091',
     };
 
@@ -13,7 +13,7 @@ describe('Validation service', () => {
 
   it('should throw an error for an invalid certificate', () => {
     const event: CertificateDetails = {
-      certificateNumber: 'W05179998',
+      testNumber: 'W05179998',
       vin: 'JL12AAZ34U0300091',
     };
 
@@ -22,7 +22,7 @@ describe('Validation service', () => {
 
   it('should throw an error for an invalid vin', () => {
     const event: CertificateDetails = {
-      certificateNumber: 'W05Q79998',
+      testNumber: 'W05Q79998',
       vin: 'JL12AAZ34U030009A',
     };
 

@@ -1,20 +1,14 @@
 import { APIGatewayEvent, Context } from 'aws-lambda';
 import { handler } from '../../src/handler';
-import * as Utils from '../../src/utils';
 import Version from '../../local/data/version.json';
 
 describe('Application entry', () => {
   let event;
   let context;
-  let majorVersionNumber: string;
-  let basePath: string;
 
   beforeEach(() => {
     event = {} as APIGatewayEvent;
     context = {} as Context;
-    jest.spyOn(Utils, 'createMajorVersionNumber').mockReturnValue('1');
-    majorVersionNumber = Utils.createMajorVersionNumber('1.0.0');
-    basePath = Utils.createHandlerBasePath(majorVersionNumber);
   });
 
   afterEach(() => {
@@ -48,18 +42,13 @@ describe('Application entry', () => {
         it('should receive the version number from an environmental variable following semver convention', () => {
           expect(process.env.API_VERSION).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)$/);
         });
-
-        it('should have version number in the API shown as major', () => {
-          expect(majorVersionNumber).toMatch(/^(\d+)$/);
-          expect(majorVersionNumber).not.toMatch(/^(\d+\.)$/);
-        });
       });
 
       describe("on '/version' endpoint(s)", () => {
         it("should call the service/lambda when the path contains '/version' and return the app version following the semver convention", async () => {
           event = {
             ...Version,
-            path: `stage/${basePath}/version`,
+            path: '/version',
           };
 
           const response = await handler(event, context);

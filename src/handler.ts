@@ -36,7 +36,7 @@ const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGat
      * We use express Router to proxy redirect requests from /v<x>/
      */
     // basePath: `${AWS_PROVIDER_STAGE}/${MAJOR_VERSION}`,
-    basePath: createHandlerBasePath(createMajorVersionNumber(API_VERSION)),
+    basePath: createHandlerBasePath(createMajorVersionNumber(API_VERSION || '1.0.0')),
   })(event, context);
 };
 

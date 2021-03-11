@@ -9,6 +9,7 @@ import CertificateNumberError from '../errors/CertificateNumberError';
 import VinError from '../errors/VinError';
 import MissingBucketNameError from '../errors/MissingBucketNameError';
 import IncorrectFileTypeError from '../errors/IncorrectFileTypeError';
+import MissingFolderNameError from '../errors/MissingFolderNameError';
 
 function isAWSError(error: Error | AWSError): error is AWSError {
   return Object.prototype.hasOwnProperty.call(error, 'code') as boolean;
@@ -18,15 +19,19 @@ export default async (
   event: CertificateDetails,
   s3: S3,
   bucketName: string | undefined,
+  folder: string | undefined,
 ): Promise<APIGatewayProxyResult> => {
   try {
     if (!bucketName) {
       throw new MissingBucketNameError();
     }
+    if (!folder) {
+      throw new MissingFolderNameError();
+    }
 
     validate(event);
 
-    const file = await getObjectFromS3(s3, bucketName, event.testNumber, event.vin);
+    const file = await getObjectFromS3(s3, bucketName, folder, event.testNumber, event.vin);
     const response = encode(file);
 
     return {
@@ -40,7 +45,7 @@ export default async (
     let message = '';
 
     // Split into 50x and 40x errors.
-    if (e instanceof NoBodyError || e instanceof MissingBucketNameError) {
+    if (e instanceof NoBodyError || e instanceof MissingBucketNameError || e instanceof MissingFolderNameError) {
       message = e.message;
     }
 

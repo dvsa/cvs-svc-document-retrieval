@@ -6,11 +6,20 @@ import VinError from '../../../src/errors/VinError';
 import CertificateDetails from '../../../src/interfaces/CertificateDetails';
 import getCertificate from '../../../src/domain/getCertificate';
 import IncorrectFileTypeError from '../../../src/errors/IncorrectFileTypeError';
+import MissingFolderNameError from '../../../src/errors/MissingFolderNameError';
 
 describe('getCertificate', () => {
   it('returns an internal server error if the bucket is undefined', async () => {
-    const response = await getCertificate({} as CertificateDetails, ({} as unknown) as S3, undefined);
+    const response = await getCertificate({} as CertificateDetails, ({} as unknown) as S3, undefined, 'folder');
     const error = new MissingBucketNameError();
+
+    expect(response.statusCode).toEqual(500);
+    expect(response.body).toEqual(error.message);
+  });
+
+  it('returns an internal server error if the folder is undefined', async () => {
+    const response = await getCertificate({} as CertificateDetails, ({} as unknown) as S3, 'bucket', undefined);
+    const error = new MissingFolderNameError();
 
     expect(response.statusCode).toEqual(500);
     expect(response.body).toEqual(error.message);
@@ -21,7 +30,7 @@ describe('getCertificate', () => {
       testNumber: 'this is invalid',
       vin: 'JN21AAZ34U0200098',
     };
-    const response = await getCertificate(event, ({} as unknown) as S3, 'bucket');
+    const response = await getCertificate(event, ({} as unknown) as S3, 'bucket', 'folder');
     const error = new CertificateNumberError();
 
     expect(response.statusCode).toEqual(400);
@@ -33,7 +42,7 @@ describe('getCertificate', () => {
       testNumber: 'W10I02544',
       vin: '',
     };
-    const response = await getCertificate(event, ({} as unknown) as S3, 'bucket');
+    const response = await getCertificate(event, ({} as unknown) as S3, 'bucket', 'folder');
     const error = new VinError();
 
     expect(response.statusCode).toEqual(400);
@@ -51,7 +60,7 @@ describe('getCertificate', () => {
       testNumber: 'W10I02544',
       vin: 'JN21AAZ34U0200098',
     };
-    const response = await getCertificate(event, mockS3, 'bucket');
+    const response = await getCertificate(event, mockS3, 'bucket', 'folder');
     const error = new NoBodyError();
 
     expect(response.statusCode).toEqual(500);
@@ -71,7 +80,7 @@ describe('getCertificate', () => {
       testNumber: 'W10I02544',
       vin: 'JN21AAZ34U0200098',
     };
-    const response = await getCertificate(event, mockS3, 'bucket');
+    const response = await getCertificate(event, mockS3, 'bucket', 'folder');
     const error = new IncorrectFileTypeError();
 
     expect(response.statusCode).toEqual(404);
@@ -89,7 +98,7 @@ describe('getCertificate', () => {
       testNumber: 'W10I02544',
       vin: 'JN21AAZ34U0200098',
     };
-    const response = await getCertificate(event, mockS3, 'bucket');
+    const response = await getCertificate(event, mockS3, 'bucket', 'folder');
 
     expect(response.statusCode).toEqual(404);
     expect(response.body).toEqual('NoSuchKey');
@@ -106,7 +115,7 @@ describe('getCertificate', () => {
       testNumber: 'W10I02544',
       vin: 'JN21AAZ34U0200098',
     };
-    const response = await getCertificate(event, mockS3, 'bucket');
+    const response = await getCertificate(event, mockS3, 'bucket', 'folder');
 
     expect(response.statusCode).toEqual(500);
     expect(response.body).toEqual('Generic Error');
@@ -125,7 +134,7 @@ describe('getCertificate', () => {
       testNumber: 'W10I02544',
       vin: 'JN21AAZ34U0200098',
     };
-    const response = await getCertificate(event, mockS3, 'bucket');
+    const response = await getCertificate(event, mockS3, 'bucket', 'folder');
 
     expect(response.statusCode).toEqual(200);
     expect(response.body).toEqual(Buffer.from('Certificate Content').toString('base64'));

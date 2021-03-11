@@ -6,7 +6,7 @@ const app = express();
 
 const router = express.Router();
 
-const { API_VERSION, BUCKET } = process.env;
+const { API_VERSION, BUCKET, BRANCH } = process.env;
 
 // Declare middlewares
 /**
@@ -58,6 +58,7 @@ app.get('/document-retrieval', (req: Request, res: Response) => {
     },
     new S3(),
     `cvs-cert-${BUCKET}`,
+    BRANCH,
   )
     .then((responseDetails) => {
       res.status(responseDetails.statusCode);

@@ -16,6 +16,7 @@ export default async (s3: S3, bucket: string, folder: string, certId: string, vi
     .promise();
 
   if (response.ContentType !== 'application/pdf') {
+    console.error(`Incorrect content-type: ${response.ContentType}`);
     throw new IncorrectFileTypeError();
   }
 

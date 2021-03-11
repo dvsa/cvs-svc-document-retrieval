@@ -1,4 +1,4 @@
 {
   "httpMethod": "GET",
-  "path": "/version"
+  "path": "/stage/v1/version"
 }

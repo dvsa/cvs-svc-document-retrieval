@@ -51,7 +51,7 @@ describe('getCertificate', () => {
 
   it('returns an internal server error if there is no Body in the S3 request', async () => {
     const mockS3 = ({} as unknown) as S3;
-    const mockPromise = jest.fn().mockReturnValue(Promise.resolve({ ContentType: 'application/pdf' }));
+    const mockPromise = jest.fn().mockReturnValue(Promise.resolve({ ContentType: 'application/octet-stream' }));
     const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
 
     mockS3.getObject = mockGetObject;
@@ -125,7 +125,7 @@ describe('getCertificate', () => {
     const mockS3 = ({} as unknown) as S3;
     const mockPromise = jest
       .fn()
-      .mockReturnValue(Promise.resolve({ Body: 'Certificate Content', ContentType: 'application/pdf' }));
+      .mockReturnValue(Promise.resolve({ Body: 'Certificate Content', ContentType: 'application/octet-stream' }));
     const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
 
     mockS3.getObject = mockGetObject;

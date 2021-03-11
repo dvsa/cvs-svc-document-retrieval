@@ -10,7 +10,7 @@ describe('S3 Service', () => {
     const vin = 'VIN2345AB';
     const mockPromise = jest
       .fn()
-      .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/pdf' }));
+      .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/octet-stream' }));
     const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
 
     mockS3.getObject = mockGetObject;
@@ -30,7 +30,7 @@ describe('S3 Service', () => {
     const vin = 'VIN2345AB';
     const mockPromise = jest
       .fn()
-      .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/pdf' }));
+      .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/octet-stream' }));
     const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
 
     mockS3.getObject = mockGetObject;
@@ -50,7 +50,7 @@ describe('S3 Service', () => {
     const vin = 'VIN2345AB';
     const mockPromise = jest
       .fn()
-      .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/pdf' }));
+      .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/octet-stream' }));
     const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
 
     mockS3.getObject = mockGetObject;
@@ -78,7 +78,7 @@ describe('S3 Service', () => {
     const folder = 'folder';
     const certNumber = 'cert123456';
     const vin = 'VIN2345AB';
-    const mockPromise = jest.fn().mockReturnValue(Promise.resolve({ ContentType: 'application/pdf' }));
+    const mockPromise = jest.fn().mockReturnValue(Promise.resolve({ ContentType: 'application/octet-stream' }));
     const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
 
     mockS3.getObject = mockGetObject;

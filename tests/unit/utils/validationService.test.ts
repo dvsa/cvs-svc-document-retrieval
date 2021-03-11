@@ -23,7 +23,7 @@ describe('Validation service', () => {
   it('should throw an error for an invalid vin', () => {
     const event: CertificateDetails = {
       testNumber: 'W05Q79998',
-      vin: 'JL12AAZ34U030009A',
+      vin: '',
     };
 
     expect(() => validator(event)).toThrow();

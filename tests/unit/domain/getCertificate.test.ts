@@ -7,7 +7,7 @@ import CertificateDetails from '../../../src/interfaces/CertificateDetails';
 import getCertificate from '../../../src/domain/getCertificate';
 import IncorrectFileTypeError from '../../../src/errors/IncorrectFileTypeError';
 
-describe('Certificate Service', () => {
+describe('getCertificate', () => {
   it('returns an internal server error if the bucket is undefined', async () => {
     const response = await getCertificate({} as CertificateDetails, ({} as unknown) as S3, undefined);
     const error = new MissingBucketNameError();
@@ -31,7 +31,7 @@ describe('Certificate Service', () => {
   it('returns a bad request if the VIN is invalid', async () => {
     const event: CertificateDetails = {
       testNumber: 'W10I02544',
-      vin: 'this is invalid',
+      vin: '',
     };
     const response = await getCertificate(event, ({} as unknown) as S3, 'bucket');
     const error = new VinError();

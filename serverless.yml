@@ -41,15 +41,11 @@ functions:
   app:
     handler: src/handler.handler
     events:
-      - http:
-        path: /
-        method: GET
+      - http: ANY /
       # We will proxy version from here in the client to match the API specs e.g. (<stage>)/v<x>/template
       # We use basePath with version from serverless-http to mount the app locally and start proxying from it
       # The version could be injected from here too
-      - http:
-        path: '/{proxy+}'
-        method: GET
+      - http: 'ANY /{proxy+}'
   # Can also define specific functions on exposed routes using pattern matching, see below as example:
   # handler.ts containing exported getHello function is exposed on path /hello
   # that you can test locally sls invoke local -f getHello -d '{"path": "hello"}' or with sls offline

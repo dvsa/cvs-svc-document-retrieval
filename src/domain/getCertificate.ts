@@ -36,7 +36,7 @@ export default async (
     const response = file.toString();
 
     return {
-      headers: { 'Content-Type': 'application/pdf' },
+      headers: { 'Content-Type': 'application/pdf', 'Content-Transfer-Encoding': 'base64' },
       statusCode: 200,
       body: response,
       isBase64Encoded: true,

@@ -2,7 +2,7 @@ import { S3, AWSError } from 'aws-sdk';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import CertificateDetails from '../interfaces/CertificateDetails';
 import getObjectFromS3 from '../infrastructure/s3/s3Service';
-import encode from '../utils/encodingService';
+// import encode from '../utils/encodingService';
 import validate from '../utils/validationService';
 import NoBodyError from '../errors/NoBodyError';
 import CertificateNumberError from '../errors/CertificateNumberError';
@@ -32,7 +32,8 @@ export default async (
     validate(event);
 
     const file = await getObjectFromS3(s3, bucketName, folder, event.testNumber, event.vin);
-    const response = encode(file);
+    // const response = file instanceof Buffer || file instanceof Blob ? file.toString() : file;
+    const response = file.toString();
 
     return {
       headers: { 'Content-Type': 'application/pdf' },

@@ -137,6 +137,6 @@ describe('getCertificate', () => {
     const response = await getCertificate(event, mockS3, 'bucket', 'folder');
 
     expect(response.statusCode).toEqual(200);
-    expect(response.body).toEqual(Buffer.from('Certificate Content').toString('base64'));
+    expect(response.body).toEqual('Certificate Content');
   });
 });

@@ -33,7 +33,7 @@ export default async (
 
     const file = await getObjectFromS3(s3, bucketName, folder, event.testNumber, event.vin);
     // const response = file instanceof Buffer || file instanceof Blob ? file.toString() : file;
-    const response = file.toString('base64');
+    const response = file.toString();
 
     return {
       headers: { 'Content-Type': 'application/pdf' },

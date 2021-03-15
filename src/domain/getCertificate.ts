@@ -32,14 +32,12 @@ export default async (
     validate(event);
 
     const file = await getObjectFromS3(s3, bucketName, folder, event.testNumber, event.vin);
-    // const response = file instanceof Buffer || file instanceof Blob ? file.toString() : file;
-    const response = file.toString();
 
     return {
       headers: { 'Content-Type': 'application/pdf' },
       statusCode: 200,
-      body: response,
-      isBase64Encoded: true,
+      body: file.toString(),
+      isBase64Encoded: false,
     };
   } catch (e) {
     let code = 500;

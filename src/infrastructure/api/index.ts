@@ -56,10 +56,7 @@ app.get('/document-retrieval', (req: Request, res: Response) => {
       vin: req.query.vinNumber as string,
       testNumber: req.query.testNumber as string,
     },
-    new S3({
-      s3ForcePathStyle: true,
-      endpoint: new AWS.Endpoint('http://localhost:4569'),
-    }),
+    new S3(),
     `cvs-cert-${BUCKET}`,
     BRANCH,
     NODE_ENV,

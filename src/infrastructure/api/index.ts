@@ -1,4 +1,4 @@
-import { S3 } from 'aws-sdk';
+import AWS, { S3 } from 'aws-sdk';
 import express, { Request, Response } from 'express';
 import getCertificate from '../../domain/getCertificate';
 
@@ -6,7 +6,7 @@ const app = express();
 
 const router = express.Router();
 
-const { API_VERSION, BUCKET, BRANCH } = process.env;
+const { API_VERSION, NODE_ENV, BUCKET, BRANCH } = process.env;
 
 // Declare middlewares
 /**
@@ -56,9 +56,13 @@ app.get('/document-retrieval', (req: Request, res: Response) => {
       vin: req.query.vinNumber as string,
       testNumber: req.query.testNumber as string,
     },
-    new S3(),
+    new S3({
+      s3ForcePathStyle: true,
+      endpoint: new AWS.Endpoint('http://localhost:4569'),
+    }),
     `cvs-cert-${BUCKET}`,
     BRANCH,
+    NODE_ENV,
   )
     .then((responseDetails) => {
       res.status(responseDetails.statusCode);

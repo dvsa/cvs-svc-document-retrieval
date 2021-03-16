@@ -2,8 +2,14 @@ import { S3 } from 'aws-sdk';
 import IncorrectFileTypeError from '../../errors/IncorrectFileTypeError';
 import NoBodyError from '../../errors/NoBodyError';
 
-export default async (s3: S3, bucket: string, folder: string, certId: string, vin: string): Promise<S3.Body> => {
-  const key = `${folder}/${certId}_${vin}.pdf`;
+export default async (
+  s3: S3,
+  bucket: string,
+  folder: string | undefined,
+  certId: string,
+  vin: string,
+): Promise<S3.Body> => {
+  const key = folder ? `${folder}/${certId}_${vin}.pdf` : `${certId}_${vin}.pdf`;
 
   console.info(`Bucket name: ${bucket}`);
   console.info(`Item key: ${key}`);

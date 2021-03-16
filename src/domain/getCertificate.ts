@@ -2,7 +2,6 @@ import { S3, AWSError } from 'aws-sdk';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import CertificateDetails from '../interfaces/CertificateDetails';
 import getObjectFromS3 from '../infrastructure/s3/s3Service';
-// import encode from '../utils/encodingService';
 import validate from '../utils/validationService';
 import NoBodyError from '../errors/NoBodyError';
 import CertificateNumberError from '../errors/CertificateNumberError';
@@ -20,20 +19,20 @@ export default async (
   s3: S3,
   bucketName: string | undefined,
   folder: string | undefined,
+  currentEnvironment: string | undefined,
 ): Promise<APIGatewayProxyResult> => {
   try {
     if (!bucketName) {
       throw new MissingBucketNameError();
     }
-    if (!folder) {
+    if (currentEnvironment !== 'local' && !folder) {
       throw new MissingFolderNameError();
     }
 
     validate(event);
 
     const file = await getObjectFromS3(s3, bucketName, folder, event.testNumber, event.vin);
-    // const response = file instanceof Buffer || file instanceof Blob ? file.toString() : file;
-    const response = file.toString();
+    const response = file.toString('base64');
 
     return {
       headers: { 'Content-Type': 'application/pdf' },

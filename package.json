@@ -11,11 +11,11 @@
     "hooks": {
       "pre-commit": "npm-run-all audit lint prettier",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-push": "npm-run-all build test"
+      "pre-push": "npm-run-all security-checks build test"
     }
   },
   "scripts": {
-    "start": "cross-env API_VERSION=${npm_package_version} NODE_ENV=local serverless offline start",
+    "start": "cross-env API_VERSION=${npm_package_version} NODE_ENV=local BUCKET=develop serverless offline start",
     "dev": "cross-env SLS_DEBUG=* VERSION=${npm_package_version} concurrently \"npm start\" \"npm run test:unit:watch\"",
     "test:unit": "cross-env NODE_ENV=test API_VERSION=${npm_package_version} jest",
     "test:unit:watch": "npm run test:unit -- --watch",
@@ -88,6 +88,7 @@
     "serverless": "2.17.0",
     "serverless-dotenv-plugin": "3.1.0",
     "serverless-offline": "6.8.0",
+    "serverless-s3-local": "0.6.7",
     "serverless-webpack": "5.3.5",
     "supertest": "6.0.1",
     "ts-jest": "26.4.4",

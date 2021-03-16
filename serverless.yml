@@ -18,6 +18,7 @@ plugins:
   # - serverless-dynamodb-local
   # https://github.com/serverless-heaven/serverless-webpack#usage-with-serverless-offline
   - serverless-offline
+  - serverless-s3-local
 
 provider:
   profile: ${env:AWS_PROVIDER_PROFILE, 'default'}
@@ -66,3 +67,12 @@ custom:
   # https://www.serverless.com/plugins/serverless-offline#usage-with-webpack - See Usage and command line options
   serverless-offline:
     httpPort: ${env:AWS_SERVER_PORT, 3001}
+  s3:
+    host: localhost
+    port: 4569
+resources:
+  Resources:
+    CertBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: cvs-cert-develop

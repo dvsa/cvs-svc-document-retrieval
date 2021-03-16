@@ -1,4 +1,4 @@
-import AWS, { S3 } from 'aws-sdk';
+import { S3 } from 'aws-sdk';
 import express, { Request, Response } from 'express';
 import getCertificate from '../../domain/getCertificate';
 

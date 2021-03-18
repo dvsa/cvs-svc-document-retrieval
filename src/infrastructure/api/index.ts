@@ -6,9 +6,7 @@ const app = express();
 
 const router = express.Router();
 
-const {
-  API_VERSION, NODE_ENV, BUCKET, BRANCH,
-} = process.env;
+const { API_VERSION, NODE_ENV, BUCKET, BRANCH } = process.env;
 
 // Declare middlewares
 /**

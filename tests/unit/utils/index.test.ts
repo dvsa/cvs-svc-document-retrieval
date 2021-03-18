@@ -17,6 +17,18 @@ describe("'Utils' file", () => {
       expect(expectedVersionNumber).toBe('1');
       expect(expectedVersionNumber).not.toBe('1.0.0');
     });
+
+    it('should throw an error if the version number is in the incorrect format', () => {
+      expect(() => {
+        createMajorVersionNumber('this is not a version');
+      }).toThrow();
+    });
+
+    it('should throw an error if the version number is empty', () => {
+      expect(() => {
+        createMajorVersionNumber('');
+      }).toThrow();
+    });
   });
 
   describe("'createHandlerBasePath' function", () => {

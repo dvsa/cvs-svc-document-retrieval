@@ -8,7 +8,13 @@ describe('API', () => {
     jest.resetAllMocks().restoreAllMocks();
   });
 
-  describe('GET', () => {
+  it('should return a 404 if the route is not recognised', async () => {
+    const result = await supertest(app).get('/not-a-route');
+
+    expect(result.status).toEqual(404);
+  });
+
+  describe('/', () => {
     test("should return '{ok: true}' when hitting '/' route", async () => {
       const result = await supertest(app).get('/');
       const resultContent = JSON.parse(result.text) as { ok: boolean };

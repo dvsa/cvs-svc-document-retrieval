@@ -17,36 +17,31 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# Idea specific hidden files
-.idea/**
+# package directories
+node_modules
+jspm_packages
 
-# Node specific files
-node_modules/**
+# Serverless directories
+.serverless
 
-# Serverless specific files
-.dynamodb/**
+# Webpack directories
+.webpack
+.serverless
+.build
+.artifact
+*.zip
 
-# Build folder
-.build/**
+# env files
+*.env*
+
+# Coverage reports
+coverage
+reports
+.scannerwork
 
 # Source maps
 *.map
 
-# S3 local storage
-.tmp/**
+.vscode/
 
-# Configuration files
-src/config/secrets.yml
-
-# Dependencies
-dependencies/**
-
-#coverage
-.nyc_output/**
-coverage/**
-
-#sonarqube
-.scannerwork/**
-
-#reports
-.reports/**
+buckets/

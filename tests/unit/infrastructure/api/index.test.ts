@@ -33,7 +33,7 @@ describe('/document-retrieval', () => {
     expect(result.status).toEqual(400);
   });
 
-  it('returns a 400 if the certificate number is missing from the querystring', async () => {
+  it('returns a 400 if the test number is missing from the querystring', async () => {
     const result = await supertest(app).get('/document-retrieval?vinNumber=1234');
 
     expect(result.status).toEqual(400);

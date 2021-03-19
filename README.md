@@ -1,6 +1,6 @@
-# cvs-svc-template
+# cvs-svc-document-retrieval
 
-The template for CVS lambda services
+Lambda to retrieve test certificates for commercial vehicles
 
 ## Dependencies
 

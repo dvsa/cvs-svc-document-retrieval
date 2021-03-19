@@ -8,20 +8,6 @@ const router = express.Router();
 
 const { API_VERSION, NODE_ENV, BUCKET, BRANCH } = process.env;
 
-// Declare middlewares
-/**
- * bodyParser, error handling, logger, etc..
- * http://expressjs.com/en/starter/basic-routing.html
- * http://expressjs.com/en/guide/using-middleware.html
- */
-
-/**
- * app level middlewares
- * app.use('/path', (req, res, next) => {
- * chain middlewares
- * next()
- * })
- */
 app.use((_request, _response, next) => {
   // TODO Add logger lib like Winston or Morgan
   next();

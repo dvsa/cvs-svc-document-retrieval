@@ -1,5 +1,5 @@
 import { S3 } from 'aws-sdk';
-import CertificateNumberError from '../../../src/errors/CertificateNumberError';
+import TestNumberError from '../../../src/errors/TestNumberError';
 import MissingBucketNameError from '../../../src/errors/MissingBucketNameError';
 import NoBodyError from '../../../src/errors/NoBodyError';
 import VinError from '../../../src/errors/VinError';
@@ -31,7 +31,7 @@ describe('getCertificate', () => {
       vin: 'JN21AAZ34U0200098',
     };
     const response = await getCertificate(event, ({} as unknown) as S3, 'bucket', 'folder', 'test');
-    const error = new CertificateNumberError();
+    const error = new TestNumberError();
 
     expect(response.statusCode).toEqual(400);
     expect(response.body).toEqual(error.message);

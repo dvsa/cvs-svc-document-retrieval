@@ -4,7 +4,7 @@ import CertificateDetails from '../interfaces/CertificateDetails';
 import getObjectFromS3 from '../infrastructure/s3/s3Service';
 import validate from '../utils/validationService';
 import NoBodyError from '../errors/NoBodyError';
-import CertificateNumberError from '../errors/CertificateNumberError';
+import TestNumberError from '../errors/TestNumberError';
 import VinError from '../errors/VinError';
 import MissingBucketNameError from '../errors/MissingBucketNameError';
 import IncorrectFileTypeError from '../errors/IncorrectFileTypeError';
@@ -49,7 +49,7 @@ export default async (
       message = e.message;
     }
 
-    if (e instanceof VinError || e instanceof CertificateNumberError) {
+    if (e instanceof VinError || e instanceof TestNumberError) {
       code = 400;
       message = e.message;
     }

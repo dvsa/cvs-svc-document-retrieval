@@ -1,4 +1,4 @@
-import CertificateNumberError from '../errors/CertificateNumberError';
+import TestNumberError from '../errors/TestNumberError';
 import VinError from '../errors/VinError';
 import CertificateDetails from '../interfaces/CertificateDetails';
 
@@ -7,7 +7,7 @@ const vinregex = /^[a-zA-Z0-9]*$/;
 
 export default (event: CertificateDetails): boolean => {
   if (!event.testNumber || !certRegex.exec(event.testNumber)) {
-    throw new CertificateNumberError();
+    throw new TestNumberError();
   }
 
   if (!event.vin || !vinregex.exec(event.vin)) {

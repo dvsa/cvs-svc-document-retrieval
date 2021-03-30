@@ -49,7 +49,7 @@ app.get('/document-retrieval', (req: Request, res: Response) => {
     });
 });
 
-app.all('*', (_request, res:Response) => {
+app.all('/document-retrieval', (_request, res: Response) => {
   res.status(501).send();
 });
 

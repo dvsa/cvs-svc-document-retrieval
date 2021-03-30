@@ -4,22 +4,9 @@ import getCertificate from '../../domain/getCertificate';
 
 const app = express();
 
-const router = express.Router();
-
-const { API_VERSION, NODE_ENV, BUCKET, BRANCH } = process.env;
-
-app.use((_request, _response, next) => {
-  // TODO Add logger lib like Winston or Morgan
-  next();
-});
-
-/**
- * Define routing and route level middleware if necessary from ./routes
- */
-router.post('/', (_request, res, next) => {
-  res.send('Hello World!');
-  next();
-});
+const {
+  API_VERSION, NODE_ENV, BUCKET, BRANCH,
+} = process.env;
 
 // Debug router before we start proxying  requests from /v<x> psth
 app.get('/', (_request, res) => {
@@ -60,6 +47,10 @@ app.get('/document-retrieval', (req: Request, res: Response) => {
       console.error(e.message);
       res.status(500).send(e.message);
     });
+});
+
+app.all('*', (_request, res:Response) => {
+  res.status(501).send();
 });
 
 export { app };

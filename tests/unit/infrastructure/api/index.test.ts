@@ -33,22 +33,22 @@ describe('/document-retrieval', () => {
     expect(result.status).toEqual(400);
   });
 
-  it('returns a 501 if the method is not supported', async () => {
+  it('returns a 405 if the method is not supported', async () => {
     const resultPost = await supertest(app).post('/document-retrieval?testNumber=1234');
 
-    expect(resultPost.status).toEqual(501);
+    expect(resultPost.status).toEqual(405);
 
     const resultPut = await supertest(app).put('/document-retrieval?testNumber=1234');
 
-    expect(resultPut.status).toEqual(501);
+    expect(resultPut.status).toEqual(405);
 
     const resultPatch = await supertest(app).patch('/document-retrieval?testNumber=1234');
 
-    expect(resultPatch.status).toEqual(501);
+    expect(resultPatch.status).toEqual(405);
 
     const resultDelete = await supertest(app).delete('/document-retrieval?testNumber=1234');
 
-    expect(resultDelete.status).toEqual(501);
+    expect(resultDelete.status).toEqual(405);
   });
 
   it('returns a 400 if the test number is missing from the querystring', async () => {

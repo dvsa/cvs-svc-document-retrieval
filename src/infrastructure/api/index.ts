@@ -50,7 +50,7 @@ app.get('/document-retrieval', (req: Request, res: Response) => {
 });
 
 app.all('/document-retrieval', (_request, res: Response) => {
-  res.status(501).send();
+  res.status(405).send();
 });
 
 export { app };

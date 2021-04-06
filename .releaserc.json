@@ -1,6 +1,6 @@
 {
-  "branches": ["master"],
-  "repositoryUrl": "https://github.com/dvsa/cvs-svc-template.git",
+  "branches": ["develop"],
+  "repositoryUrl": "https://github.com/dvsa/cvs-svc-document-retrieval.git",
   "tagFormat": "${version}",
   "plugins": [
     [

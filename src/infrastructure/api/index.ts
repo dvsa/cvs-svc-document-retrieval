@@ -34,14 +34,14 @@ app.get('/document-retrieval', (req: Request, res: Response) => {
     BRANCH,
     NODE_ENV,
   )
-    .then((responseDetails) => {
-      res.status(responseDetails.statusCode);
+    .then(({ statusCode, headers, body }) => {
+      res.status(statusCode);
 
-      if (responseDetails.headers) {
-        res.header(responseDetails.headers);
+      if (headers) {
+        res.header(headers);
       }
 
-      res.send(responseDetails.body);
+      res.send(body);
     })
     .catch((e: Error) => {
       console.error(e.message);

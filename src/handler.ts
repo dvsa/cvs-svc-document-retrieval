@@ -6,10 +6,13 @@ import { app } from './infrastructure/api';
 
 import { createMajorVersionNumber, createHandlerBasePath } from './utils';
 
-const { API_VERSION } = process.env;
-
 const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyStructuredResultV2> => {
   console.log(event);
+  const { API_VERSION } = process.env;
+
+  if (!API_VERSION) {
+    throw new Error('API_VERSION not supplied');
+  }
 
   return serverless(app, {
     /**

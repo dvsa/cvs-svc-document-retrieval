@@ -2,6 +2,10 @@ import { S3 } from 'aws-sdk';
 import getFromS3 from '../../../../src/infrastructure/s3/s3Service';
 
 describe('S3 Service', () => {
+  afterEach(() => {
+    jest.resetAllMocks().restoreAllMocks();
+  });
+
   it('passes the expected key to getObject if folder is defined', async () => {
     const mockS3 = ({} as unknown) as S3;
     const bucket = 'bucket';
@@ -10,7 +14,7 @@ describe('S3 Service', () => {
     const vin = 'VIN2345AB';
     const mockPromise = jest
       .fn()
-      .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/octet-stream' }));
+      .mockResolvedValue({ Body: 'Success!', ContentType: 'application/octet-stream' });
     const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
 
     mockS3.getObject = mockGetObject;
@@ -78,7 +82,7 @@ describe('S3 Service', () => {
     expect(await getFromS3(mockS3, bucket, folder, certNumber, vin)).toEqual('Success!');
   });
 
-  it('throws an error if te response is not a PDF', async () => {
+  it('throws an error if the response is not a PDF', async () => {
     const mockS3 = ({} as unknown) as S3;
     const bucket = 'bucket';
     const folder = 'folder';

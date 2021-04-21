@@ -8,8 +8,11 @@ describe('Application entry', () => {
   let context;
   let majorVersionNumber: string;
   let basePath: string;
+  const oldEnv = process.env;
 
   beforeEach(() => {
+    jest.resetModules();
+    process.env = { ...oldEnv };
     event = {} as APIGatewayEvent;
     context = {} as Context;
     jest.spyOn(Utils, 'createMajorVersionNumber').mockReturnValue('1');
@@ -18,10 +21,21 @@ describe('Application entry', () => {
   });
 
   afterEach(() => {
+    process.env = oldEnv; // Restore old environment
     jest.resetAllMocks().restoreAllMocks();
   });
 
+  afterAll(() => {
+  });
+
   describe('Handler', () => {
+    it('throws an error if API_VERSION is undefined', async () => {
+      event = { body: 'Test Body' };
+
+      process.env.API_VERSION = undefined;
+
+      await expect(handler(event, context)).rejects.toThrow();
+    });
     it('should call the express wrapper', async () => {
       event = { body: 'Test Body' };
 

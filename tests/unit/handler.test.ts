@@ -29,13 +29,6 @@ describe('Application entry', () => {
   });
 
   describe('Handler', () => {
-    it('throws an error if API_VERSION is undefined', async () => {
-      event = { body: 'Test Body' };
-
-      process.env.API_VERSION = undefined;
-
-      await expect(handler(event, context)).rejects.toThrow();
-    });
     it('should call the express wrapper', async () => {
       event = { body: 'Test Body' };
 

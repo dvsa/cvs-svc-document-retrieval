@@ -1,10 +1,7 @@
 import 'source-map-support/register';
 import serverless from 'serverless-http';
 import { Context, APIGatewayEvent, APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
-
 import { app } from './infrastructure/api';
-
-import { createMajorVersionNumber, createHandlerBasePath } from './utils';
 
 const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyStructuredResultV2> => {
   console.log(event);
@@ -39,7 +36,7 @@ const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGat
      * We use express Router to proxy redirect requests from /v<x>/
      */
     // basePath: `${AWS_PROVIDER_STAGE}/${MAJOR_VERSION}`,
-    basePath: createHandlerBasePath(createMajorVersionNumber(API_VERSION || '1.0.0')),
+    basePath: 'v1',
   })(event, context);
 };
 

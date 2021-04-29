@@ -1,12 +1,10 @@
-import { S3 } from 'aws-sdk';
+import AWS, { S3 } from 'aws-sdk';
 import express, { Request, Response } from 'express';
 import getCertificate from '../../domain/getCertificate';
 
 const app = express();
 
-const {
-  API_VERSION, NODE_ENV, BUCKET, BRANCH,
-} = process.env;
+const { API_VERSION, NODE_ENV, BUCKET, BRANCH } = process.env;
 
 // Debug router before we start proxying  requests from /v<x> psth
 app.get('/', (_request, res) => {
@@ -29,7 +27,15 @@ app.get('/document-retrieval', (req: Request, res: Response) => {
       vin: req.query.vinNumber as string,
       testNumber: req.query.testNumber as string,
     },
-    new S3(),
+    new S3(
+      process.env.IS_OFFLINE && {
+        s3ForcePathStyle: true,
+        // You will need to create your s3local profile (~/.aws/credentials) if you are not using any
+        accessKeyId: 'S3RVER',
+        secretAccessKey: 'S3RVER',
+        endpoint: new AWS.Endpoint('http://localhost:4569'),
+      },
+    ),
     `cvs-cert-${BUCKET}`,
     BRANCH,
     NODE_ENV,

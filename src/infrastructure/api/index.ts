@@ -4,7 +4,9 @@ import getCertificate from '../../domain/getCertificate';
 
 const app = express();
 
-const { API_VERSION, NODE_ENV, BUCKET, BRANCH } = process.env;
+const {
+  API_VERSION, NODE_ENV, BUCKET, BRANCH,
+} = process.env;
 
 // Debug router before we start proxying  requests from /v<x> psth
 app.get('/', (_request, res) => {

@@ -15,7 +15,7 @@
     }
   },
   "scripts": {
-    "start": "cross-env API_VERSION=${npm_package_version} NODE_ENV=local BUCKET=develop  SERVICE=${npm_package_name}serverless offline start",
+    "start": "cross-env API_VERSION=${npm_package_version} NODE_ENV=local BUCKET=develop SERVICE=${npm_package_name} serverless offline start",
     "dev": "cross-env SLS_DEBUG=* VERSION=${npm_package_version} concurrently \"npm start\" \"npm run test:unit:watch\"",
     "test:unit": "cross-env NODE_ENV=test SERVICE=${npm_package_name} API_VERSION=${npm_package_version} jest",
     "test:unit:watch": "npm run test:unit -- --watch",
@@ -41,7 +41,7 @@
     "package:create": "cross-env SERVICE=${npm_package_name} NODE_ENV=local sls package --package .build",
     "package:prepare": "mv ./.build/app.zip ./.build/build.zip",
     "package:move": "mv ./.build/build.zip ./${ZIP_NAME}.zip",
-    "package": "npm-run-all clean package:*",
+    "package": "npm-run-all package:*",
     "release": "semantic-release",
     "prerelease": "semantic-release --dry-run",
     "dependencies:check": "ncu",
@@ -61,7 +61,7 @@
     "@semantic-release/changelog": "5.0.1",
     "@semantic-release/git": "9.0.0",
     "@semantic-release/github": "7.2.0",
-    "@semantic-release/npm": "7.0.9",
+    "@semantic-release/npm": "7.1.3",
     "@serverless/typescript": "2.17.0",
     "@types/aws-lambda": "8.10.70",
     "@types/jest": "26.0.20",

@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/handler.ts",
   "engines": {
-    "node": "10.*",
+    "node": "14.*",
     "npm": "6.*"
   },
   "husky": {
@@ -24,7 +24,7 @@
     "test:integration": "cross-env NODE_ENV=test echo 'integration tests to be added'",
     "test:integration:watch": "echo 'integration tests --watch to be added'",
     "test:integration:coverage": "cross-env echo 'integration tests coverage to be added'",
-    "test": "npm-run-all lint test:unit:coverage test:integration:coverage",
+    "test": "npm-run-all test:unit:coverage",
     "mock-server": "jsonsls run ./data/db.json",
     "audit": "npm audit",
     "lint:analyse": "eslint . --ext js,ts --fix",

@@ -146,9 +146,12 @@ type(scope?): subject
 
 Domain Drive Design diagram with Interfaces, Application, Domain layers and Infrastructure across the layers.
 
+
 <p align="center">
   <img src="./docs/DDD_architecture.jpg" alt="Domain Drive Design diagram with Interfaces, Application, Domain layers and Infrastructure across the layers" >
 </p>
+
+Please refer to the the [docs](./docs/README.md) for the API specification and samples of postman requests.
 
 #### Toolings
 

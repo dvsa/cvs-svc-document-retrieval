@@ -1,0 +1,80 @@
+{
+	"info": {
+		"_postman_id": "b07e6131-6842-4b31-ac0c-aa58352c57d5",
+		"name": "document-retrival",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get certificate",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "{{api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.{{api}}.cvs.dvsacloud.uk/{{branch}}/v1/document-retrieval?vinNumber=123&testNumber=a12b12345",
+					"protocol": "https",
+					"host": [
+						"api",
+						"{{api}}",
+						"cvs",
+						"dvsacloud",
+						"uk"
+					],
+					"path": [
+						"{{branch}}",
+						"v1",
+						"document-retrieval"
+					],
+					"query": [
+						{
+							"key": "vinNumber",
+							"value": "123"
+						},
+						{
+							"key": "testNumber",
+							"value": "a12b12345"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get certificate local",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/local/v1/document-retrieval?vinNumber=123&testNumber=a12b12345",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"local",
+						"v1",
+						"document-retrieval"
+					],
+					"query": [
+						{
+							"key": "vinNumber",
+							"value": "123"
+						},
+						{
+							"key": "testNumber",
+							"value": "a12b12345"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

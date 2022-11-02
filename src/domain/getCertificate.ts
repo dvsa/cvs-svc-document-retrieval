@@ -34,8 +34,17 @@ export default async (
     const file = await getObjectFromS3(s3, bucketName, folder, event.testNumber, event.vin);
     const response = file.toString('base64');
 
+    const headers = {
+      'Content-type': 'application/pdf',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+      'X-Content-Type-Options': 'nosniff',
+      Vary: 'Origin',
+      'X-XSS-Protection': '1; mode=block',
+    };
+
     return {
-      headers: { 'Content-Type': 'application/pdf' },
+      headers,
       statusCode: 200,
       body: response,
       isBase64Encoded: true,

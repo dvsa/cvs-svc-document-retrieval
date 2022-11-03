@@ -38,7 +38,7 @@
     "build:production": "source config/.env.production && cross-env SERVICE=${npm_package_name} NODE_ENV=production webpack -c ./scripts/webpack.config.build.js --env=production",
     "build": "npm-run-all clean build:dev",
     "sonar-scanner": "sonar-scanner",
-    "package:create": "cross-env SERVICE=${npm_package_name} NODE_ENV=local sls package --package .build",
+    "package:create": "cross-env SERVICE=${npm_package_name} API_VERSION=${npm_package_version} NODE_ENV=local sls package --package .build",
     "package:prepare": "mv ./.build/app.zip ./.build/build.zip",
     "package:move": "mv ./.build/build.zip ./${ZIP_NAME}.zip",
     "package": "npm-run-all package:*",

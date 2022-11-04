@@ -59,10 +59,9 @@ To test downloading a certificate:
 
 1. Change the default credentials to the serverless-s3-local ones (`S3RVER`, `S3RVER`) or create a s3profile in your `~/.aws/credentials` if you already have existing aws profiles.
 2. Create a folder in the root of the project called `buckets`
-3. Download a pdf/certificate and run `aws --endpoint http://localhost:4569 s3api put-object --bucket cvs-cert-develop --key <your certificate name> --body <location of your certificate including filename>` to put a copy of your certificate into the S3 bucket which is in the `buckets` folder you created.
-4. Change the metadata of your item in the bucket so that the mime type is `application/octet-stream`
-5. Use Postman to request the certificate using the VIN and certificate number in the name of your certificate. E.g. http://localhost:3001/local/document-retrieval?vinNumber=T12765432&testNumber=W01A00229 for a file with a key of `W01A00229_T12765432.pdf`
-6. Convert the base64 encoded string to a PDF using a service, e.g. https://base64.guru/converter/decode/pdf
+3. Download a pdf/certificate and run `aws --endpoint http://localhost:4569 s3api put-object --bucket cvs-cert-develop --key <your certificate name> --body <location of your certificate including filename> --content-type application/octet-stream` to put a copy of your certificate into the S3 bucket which is in the `buckets` folder you created.
+4. Use Postman to request the certificate using the VIN and certificate number in the name of your certificate. E.g. http://localhost:3001/local/document-retrieval?vinNumber=T12765432&testNumber=W01A00229 for a file with a key of `W01A00229_T12765432.pdf`
+5. Convert the base64 encoded string to a PDF using a service, e.g. https://base64.guru/converter/decode/pdf
 
 You should be able to see the certificate on your screen.
 
@@ -145,7 +144,6 @@ type(scope?): subject
 #### Code structure
 
 Domain Drive Design diagram with Interfaces, Application, Domain layers and Infrastructure across the layers.
-
 
 <p align="center">
   <img src="./docs/DDD_architecture.jpg" alt="Domain Drive Design diagram with Interfaces, Application, Domain layers and Infrastructure across the layers" >

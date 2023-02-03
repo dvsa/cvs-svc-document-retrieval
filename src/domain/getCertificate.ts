@@ -1,8 +1,8 @@
 import { S3, AWSError } from 'aws-sdk';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import CertificateDetails from '../interfaces/CertificateDetails';
-import getObjectFromS3 from '../infrastructure/s3/s3Service';
-import validate from '../utils/validationService';
+import getObjectFromS3 from '../infrastructure/s3/s3CertService';
+import validate from '../utils/certificateValidationService';
 import NoBodyError from '../errors/NoBodyError';
 import TestNumberError from '../errors/TestNumberError';
 import VinError from '../errors/VinError';

@@ -20,7 +20,8 @@ export default async (
     })
     .promise();
 
-  if (response.ContentType !== 'application/octet-stream') {
+  if (response.ContentType !== 'application/octet-stream' && response.ContentType !== 'application/pdf') {
+    // TODO: Cover this in case we encrypt the plates as octet stream or some other form
     console.error(`Incorrect content-type: ${response.ContentType}`);
     throw new IncorrectFileTypeError();
   }

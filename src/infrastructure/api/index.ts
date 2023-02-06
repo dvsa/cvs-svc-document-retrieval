@@ -51,8 +51,7 @@ app.get('/document-retrieval', (req: Request, res: Response) => {
         console.error(e.message);
         res.status(500).send(e.message);
       });
-  }
-  else if (req.query.plateSerialNumber) {
+  } else if (req.query.plateSerialNumber) {
     getPlate(
       {
         plateSerialNumber: req.query.plateSerialNumber as string,

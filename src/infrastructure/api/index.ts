@@ -20,6 +20,8 @@ app.get('/version', (_request, res) => {
 
 app.get('/document-retrieval', (req: Request, res: Response) => {
   if (req.query.vinNumber && req.query.testNumber && !req.query.plateSerialNumber) {
+    console.info('Calling cert service');
+
     getCertificate(
       {
         vin: req.query.vinNumber as string,
@@ -52,6 +54,8 @@ app.get('/document-retrieval', (req: Request, res: Response) => {
         res.status(500).send(e.message);
       });
   } else if (req.query.plateSerialNumber) {
+    console.info('Calling plate service');
+
     getPlate(
       {
         plateSerialNumber: req.query.plateSerialNumber as string,

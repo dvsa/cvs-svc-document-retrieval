@@ -1,5 +1,5 @@
 import CertificateDetails from '../../../src/interfaces/CertificateDetails';
-import validator from '../../../src/utils/validationService';
+import validator from '../../../src/utils/certificateValidationService';
 
 describe('Validation service', () => {
   it('should pass a valid test number and VIN', () => {

@@ -1,21 +1,20 @@
 import { S3, AWSError } from 'aws-sdk';
 import { APIGatewayProxyResult } from 'aws-lambda';
-import CertificateDetails from '../interfaces/CertificateDetails';
-import getObjectFromS3 from '../infrastructure/s3/s3CertService';
-import validate from '../utils/certificateValidationService';
+import PlateDetails from '../interfaces/PlateDetails';
+import getObjectFromS3 from '../infrastructure/s3/s3PlateService';
+import validate from '../utils/plateValidationService';
 import NoBodyError from '../errors/NoBodyError';
-import TestNumberError from '../errors/TestNumberError';
-import VinError from '../errors/VinError';
 import MissingBucketNameError from '../errors/MissingBucketNameError';
 import IncorrectFileTypeError from '../errors/IncorrectFileTypeError';
 import MissingFolderNameError from '../errors/MissingFolderNameError';
+import PlateSerialNumberError from '../errors/PlateSerialNumberError';
 
 function isAWSError(error: Error | AWSError): error is AWSError {
   return Object.prototype.hasOwnProperty.call(error, 'code') as boolean;
 }
 
 export default async (
-  event: CertificateDetails,
+  event: PlateDetails,
   s3: S3,
   bucketName: string | undefined,
   folder: string | undefined,
@@ -29,9 +28,10 @@ export default async (
       throw new MissingFolderNameError();
     }
 
+    console.log(`Validating: ${event.plateSerialNumber}`);
     validate(event);
 
-    const file = await getObjectFromS3(s3, bucketName, folder, event.testNumber, event.vin);
+    const file = await getObjectFromS3(s3, bucketName, folder, event.plateSerialNumber);
     const response = file.toString('base64');
 
     const headers = {
@@ -58,7 +58,7 @@ export default async (
       message = e.message;
     }
 
-    if (e instanceof VinError || e instanceof TestNumberError) {
+    if (e instanceof PlateSerialNumberError) {
       code = 400;
       message = e.message;
     }

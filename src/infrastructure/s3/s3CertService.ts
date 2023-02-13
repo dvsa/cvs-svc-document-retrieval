@@ -21,7 +21,7 @@ export default async (
     })
     .promise();
 
-  if (response.ContentType !== 'application/octet-stream') {
+  if (response.ContentType !== 'application/octet-stream' && response.ContentType !== 'application/pdf') {
     console.error(`Incorrect content-type: ${response.ContentType}`);
     throw new IncorrectFileTypeError();
   }

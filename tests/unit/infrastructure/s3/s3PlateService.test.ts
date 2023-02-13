@@ -22,7 +22,7 @@ describe('S3 Plate Service', () => {
     const firstCall = mockGetObject.mock.calls[0] as S3.GetObjectRequest[];
     const firstArg = firstCall[0];
 
-    expect(firstArg.Key).toEqual(`${folder}/${plateSerialNumber}.pdf`);
+    expect(firstArg.Key).toEqual(`${folder}/plate_${plateSerialNumber}.pdf`);
   });
 
   it('passes the expected key to getObject if folder is undefined', async () => {
@@ -41,7 +41,7 @@ describe('S3 Plate Service', () => {
     const firstCall = mockGetObject.mock.calls[0] as S3.GetObjectRequest[];
     const firstArg = firstCall[0];
 
-    expect(firstArg.Key).toEqual(`${plateSerialNumber}.pdf`);
+    expect(firstArg.Key).toEqual(`plate_${plateSerialNumber}.pdf`);
   });
 
   it('passes the bucket to getObject', () => {

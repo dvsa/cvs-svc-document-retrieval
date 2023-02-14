@@ -8,7 +8,7 @@ export default async (
   folder: string | undefined,
   plateSerialNumber: string,
 ): Promise<S3.Body> => {
-  const key = folder ? `${folder}/plate_${plateSerialNumber}.pdf` : `plate_${plateSerialNumber}.pdf`;
+  const key = folder ? `${folder}/${plateSerialNumber}.pdf` : `${plateSerialNumber}.pdf`;
 
   console.info(`Bucket name: ${bucket}`);
   console.info(`Item key: ${key}`);

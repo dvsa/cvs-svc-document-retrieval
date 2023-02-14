@@ -43,7 +43,7 @@ describe('getPlate', () => {
     mockS3.getObject = mockGetObject;
 
     const event: PlateDetails = {
-      plateSerialNumber: '123456',
+      plateSerialNumber: 'plate_123456',
     };
     const response = await getPlate(event, mockS3, 'bucket', 'folder', 'test');
     const error = new NoBodyError();
@@ -62,7 +62,7 @@ describe('getPlate', () => {
     mockS3.getObject = mockGetObject;
 
     const event: PlateDetails = {
-      plateSerialNumber: '123456',
+      plateSerialNumber: 'plate_123456',
     };
     const response = await getPlate(event, mockS3, 'bucket', 'folder', 'test');
     const error = new IncorrectFileTypeError();
@@ -79,7 +79,7 @@ describe('getPlate', () => {
     mockS3.getObject = mockGetObject;
 
     const event: PlateDetails = {
-      plateSerialNumber: '123456',
+      plateSerialNumber: 'plate_123456',
     };
     const response = await getPlate(event, mockS3, 'bucket', 'folder', 'test');
 
@@ -95,7 +95,7 @@ describe('getPlate', () => {
     mockS3.getObject = mockGetObject;
 
     const event: PlateDetails = {
-      plateSerialNumber: '123456',
+      plateSerialNumber: 'plate_123456',
     };
     const response = await getPlate(event, mockS3, 'bucket', 'folder', 'test');
 
@@ -113,7 +113,7 @@ describe('getPlate', () => {
     mockS3.getObject = mockGetObject;
 
     const event: PlateDetails = {
-      plateSerialNumber: '123456',
+      plateSerialNumber: 'plate_123456',
     };
     const response = await getPlate(event, mockS3, 'bucket', 'folder', 'test');
 
@@ -132,7 +132,7 @@ describe('getPlate', () => {
     mockS3.getObject = mockGetObject;
 
     const event: PlateDetails = {
-      plateSerialNumber: '123456',
+      plateSerialNumber: 'plate_123456',
     };
     const response = await getPlate(event, mockS3, 'bucket', 'folder', 'test');
 
@@ -150,7 +150,7 @@ describe('getPlate', () => {
     mockS3.getObject = mockGetObject;
 
     const event: PlateDetails = {
-      plateSerialNumber: '123456',
+      plateSerialNumber: 'plate_123456',
     };
     const response = await getPlate(event, mockS3, 'bucket', undefined, 'local');
 

@@ -10,7 +10,7 @@ describe('S3 Plate Service', () => {
     const mockS3 = ({} as unknown) as S3;
     const bucket = 'bucket';
     const folder = 'folder';
-    const plateSerialNumber = '123453';
+    const plateSerialNumber = 'plate_123453';
     const mockPromise = jest
       .fn()
       .mockResolvedValue({ Body: 'Success!', ContentType: 'application/octet-stream' });
@@ -29,7 +29,7 @@ describe('S3 Plate Service', () => {
     const mockS3 = ({} as unknown) as S3;
     const bucket = 'bucket';
     const folder = undefined;
-    const plateSerialNumber = '123453';
+    const plateSerialNumber = 'plate_123453';
     const mockPromise = jest
       .fn()
       .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/octet-stream' }));
@@ -48,7 +48,7 @@ describe('S3 Plate Service', () => {
     const mockS3 = ({} as unknown) as S3;
     const bucket = 'bucket';
     const folder = 'folder';
-    const plateSerialNumber = '123453';
+    const plateSerialNumber = 'plate_123453';
     const mockPromise = jest
       .fn()
       .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/octet-stream' }));
@@ -67,7 +67,7 @@ describe('S3 Plate Service', () => {
     const mockS3 = ({} as unknown) as S3;
     const bucket = 'bucket';
     const folder = 'folder';
-    const plateSerialNumber = '123453';
+    const plateSerialNumber = 'plate_123453';
     const mockPromise = jest
       .fn()
       .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/octet-stream' }));
@@ -82,7 +82,7 @@ describe('S3 Plate Service', () => {
     const mockS3 = ({} as unknown) as S3;
     const bucket = 'bucket';
     const folder = 'folder';
-    const plateSerialNumber = '123453';
+    const plateSerialNumber = 'plate_123453';
     const mockPromise = jest.fn().mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'image/jpg' }));
     const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
 
@@ -95,7 +95,7 @@ describe('S3 Plate Service', () => {
     const mockS3 = ({} as unknown) as S3;
     const bucket = 'bucket';
     const folder = 'folder';
-    const plateSerialNumber = '123453';
+    const plateSerialNumber = 'plate_123453';
     const mockPromise = jest.fn().mockReturnValue(Promise.resolve({ ContentType: 'application/octet-stream' }));
     const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
 

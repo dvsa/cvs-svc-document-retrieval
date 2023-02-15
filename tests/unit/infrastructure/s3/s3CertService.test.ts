@@ -1,7 +1,7 @@
 import { S3 } from 'aws-sdk';
-import getFromS3 from '../../../../src/infrastructure/s3/s3Service';
+import getFromS3 from '../../../../src/infrastructure/s3/s3CertService';
 
-describe('S3 Service', () => {
+describe('S3 Certificate Service', () => {
   afterEach(() => {
     jest.resetAllMocks().restoreAllMocks();
   });

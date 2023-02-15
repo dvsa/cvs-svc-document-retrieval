@@ -1,6 +1,7 @@
 import AWS, { S3 } from 'aws-sdk';
 import express, { Request, Response } from 'express';
 import getCertificate from '../../domain/getCertificate';
+import getPlate from '../../domain/getPlate';
 
 const app = express();
 
@@ -18,43 +19,76 @@ app.get('/version', (_request, res) => {
 });
 
 app.get('/document-retrieval', (req: Request, res: Response) => {
-  if (!req.query.vinNumber || !req.query.testNumber) {
-    res.status(400).end();
+  if (req.query.vinNumber && req.query.testNumber && !req.query.plateSerialNumber) {
+    console.info('Calling cert service');
 
-    return;
-  }
-
-  getCertificate(
-    {
-      vin: req.query.vinNumber as string,
-      testNumber: req.query.testNumber as string,
-    },
-    new S3(
-      process.env.IS_OFFLINE && {
-        s3ForcePathStyle: true,
-        // You will need to create your s3local profile (~/.aws/credentials) if you are not using any
-        accessKeyId: 'S3RVER',
-        secretAccessKey: 'S3RVER',
-        endpoint: new AWS.Endpoint('http://localhost:4569'),
+    getCertificate(
+      {
+        vin: req.query.vinNumber as string,
+        testNumber: req.query.testNumber as string,
       },
-    ),
-    `cvs-cert-${BUCKET}`,
-    BRANCH,
-    NODE_ENV,
-  )
-    .then(({ statusCode, headers, body }) => {
-      res.status(statusCode);
+      new S3(
+        process.env.IS_OFFLINE && {
+          s3ForcePathStyle: true,
+          // You will need to create your s3local profile (~/.aws/credentials) if you are not using any
+          accessKeyId: 'S3RVER',
+          secretAccessKey: 'S3RVER',
+          endpoint: new AWS.Endpoint('http://localhost:4569'),
+        },
+      ),
+      `cvs-cert-${BUCKET}`,
+      BRANCH,
+      NODE_ENV,
+    )
+      .then(({ statusCode, headers, body }) => {
+        res.status(statusCode);
 
-      if (headers) {
-        res.header(headers);
-      }
+        if (headers) {
+          res.header(headers);
+        }
 
-      res.send(body);
-    })
-    .catch((e: Error) => {
-      console.error(e.message);
-      res.status(500).send(e.message);
-    });
+        res.send(body);
+      })
+      .catch((e: Error) => {
+        console.error(e.message);
+        res.status(500).send(e.message);
+      });
+  } else if (req.query.plateSerialNumber) {
+    console.info('Calling plate service');
+
+    getPlate(
+      {
+        plateSerialNumber: req.query.plateSerialNumber as string,
+      },
+      new S3(
+        process.env.IS_OFFLINE && {
+          s3ForcePathStyle: true,
+          // You will need to create your s3local profile (~/.aws/credentials) if you are not using any
+          accessKeyId: 'S3RVER',
+          secretAccessKey: 'S3RVER',
+          endpoint: new AWS.Endpoint('http://localhost:4569'),
+        },
+      ),
+      `cvs-cert-${BUCKET}`,
+      BRANCH,
+      NODE_ENV,
+    )
+      .then(({ statusCode, headers, body }) => {
+        res.status(statusCode);
+
+        if (headers) {
+          res.header(headers);
+        }
+
+        res.send(body);
+      })
+      .catch((e: Error) => {
+        console.error(e.message);
+        res.status(500).send(e.message);
+      });
+  } else {
+    res.status(400).end();
+  }
 });
 
 app.all('/document-retrieval', (_request, res: Response) => {

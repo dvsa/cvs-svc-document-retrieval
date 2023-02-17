@@ -1,6 +1,8 @@
 import supertest from 'supertest';
 import { app } from '../../../../src/infrastructure/api';
 import getCertificate from '../../../../src/domain/getCertificate';
+import getPlate from '../../../../src/domain/getPlate';
+import getLetter from '../../../../src/domain/getLetter';
 
 // TODO Define Mock strategy
 describe('API', () => {
@@ -51,10 +53,16 @@ describe('/document-retrieval', () => {
     expect(resultDelete.status).toEqual(405);
   });
 
-  it('returns a 400 if the test number is missing from the querystring', async () => {
-    const result = await supertest(app).get('/document-retrieval?vinNumber=1234');
+  describe('returns a 400 if the querystring formats are incorrect', () => {
+    it('returns a 400 if the test number is missing from the querystring when fetching a certificate', async () => {
+      const result = await supertest(app).get('/document-retrieval?vinNumber=1234');
+      expect(result.status).toEqual(400);
+    });
 
-    expect(result.status).toEqual(400);
+    it('returns a 400 if querystring is in the wrong format', async () => {
+      const result = await supertest(app).get('/document-retrieval?vinNumber=1234&testNumber=1234&plateSerialNumber=1234&systemNumber=1234');
+      expect(result.status).toEqual(400);
+    });
   });
 
   it('returns the expected body and status from the getCertificate call', async () => {
@@ -74,6 +82,50 @@ describe('/document-retrieval', () => {
       },
     });
     const result = await supertest(app).get('/document-retrieval?vinNumber=1234&testNumber=1234');
+
+    expect(result.headers).toHaveProperty('content-type');
+    expect(result.get('content-type')).toContain('application/pdf');
+  });
+
+  it('returns the expected body and status from the getPlate call', async () => {
+    (getPlate as jest.Mock) = jest.fn().mockResolvedValue({ statusCode: 200, body: 'this is a test' });
+    const result = await supertest(app).get('/document-retrieval?plateSerialNumber=1234');
+
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('this is a test');
+  });
+
+  it('adds the header returned from the getPlate call', async () => {
+    (getPlate as jest.Mock) = jest.fn().mockResolvedValue({
+      statusCode: 200,
+      body: 'this is a test',
+      headers: {
+        'Content-Type': 'application/pdf',
+      },
+    });
+    const result = await supertest(app).get('/document-retrieval?plateSerialNumber=1234');
+
+    expect(result.headers).toHaveProperty('content-type');
+    expect(result.get('content-type')).toContain('application/pdf');
+  });
+
+  it('returns the expected body and status from the getLetter call', async () => {
+    (getLetter as jest.Mock) = jest.fn().mockResolvedValue({ statusCode: 200, body: 'this is a test' });
+    const result = await supertest(app).get('/document-retrieval?vinNumber=1234&systemNumber=1234');
+
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('this is a test');
+  });
+
+  it('adds the header returned from the getLetter call', async () => {
+    (getLetter as jest.Mock) = jest.fn().mockResolvedValue({
+      statusCode: 200,
+      body: 'this is a test',
+      headers: {
+        'Content-Type': 'application/pdf',
+      },
+    });
+    const result = await supertest(app).get('/document-retrieval?vinNumber=1234&systemNumber=1234');
 
     expect(result.headers).toHaveProperty('content-type');
     expect(result.get('content-type')).toContain('application/pdf');

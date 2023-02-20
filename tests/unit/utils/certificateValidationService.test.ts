@@ -1,7 +1,7 @@
 import CertificateDetails from '../../../src/interfaces/CertificateDetails';
 import validator from '../../../src/utils/certificateValidationService';
 
-describe('Validation service', () => {
+describe('Certificate validation service', () => {
   it('should pass a valid test number and VIN', () => {
     const event: CertificateDetails = {
       testNumber: 'W05Q79998',

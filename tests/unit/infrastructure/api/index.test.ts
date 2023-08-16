@@ -13,7 +13,7 @@ describe('API', () => {
   it('should return a 404 if the route is not recognised', async () => {
     const result = await supertest(app).get('/not-a-route');
 
-    expect(result.status).toBe(404);
+    expect(result.status).toEqual(404);
   });
 
   describe('/', () => {
@@ -21,9 +21,9 @@ describe('API', () => {
       const result = await supertest(app).get('/');
       const resultContent = JSON.parse(result.text) as { ok: boolean };
 
-      expect(result.status).toBe(200);
+      expect(result.status).toEqual(200);
       expect(resultContent).toHaveProperty('ok');
-      expect(resultContent.ok).toBe(true);
+      expect(resultContent.ok).toEqual(true);
     });
   });
 });
@@ -32,36 +32,36 @@ describe('/document-retrieval', () => {
   it('returns a 400 if the vin is missing from the querystring', async () => {
     const result = await supertest(app).get('/document-retrieval?testNumber=1234');
 
-    expect(result.status).toBe(400);
+    expect(result.status).toEqual(400);
   });
 
   it('returns a 405 if the method is not supported', async () => {
     const resultPost = await supertest(app).post('/document-retrieval?testNumber=1234');
 
-    expect(resultPost.status).toBe(405);
+    expect(resultPost.status).toEqual(405);
 
     const resultPut = await supertest(app).put('/document-retrieval?testNumber=1234');
 
-    expect(resultPut.status).toBe(405);
+    expect(resultPut.status).toEqual(405);
 
     const resultPatch = await supertest(app).patch('/document-retrieval?testNumber=1234');
 
-    expect(resultPatch.status).toBe(405);
+    expect(resultPatch.status).toEqual(405);
 
     const resultDelete = await supertest(app).delete('/document-retrieval?testNumber=1234');
 
-    expect(resultDelete.status).toBe(405);
+    expect(resultDelete.status).toEqual(405);
   });
 
   describe('returns a 400 if the querystring formats are incorrect', () => {
     it('returns a 400 if the test number is missing from the querystring when fetching a certificate', async () => {
       const result = await supertest(app).get('/document-retrieval?vinNumber=1234');
-      expect(result.status).toBe(400);
+      expect(result.status).toEqual(400);
     });
 
     it('returns a 400 if querystring is in the wrong format', async () => {
       const result = await supertest(app).get('/document-retrieval?vinNumber=1234&testNumber=1234&plateSerialNumber=1234&systemNumber=1234');
-      expect(result.status).toBe(400);
+      expect(result.status).toEqual(400);
     });
   });
 
@@ -69,8 +69,8 @@ describe('/document-retrieval', () => {
     (getCertificate as jest.Mock) = jest.fn().mockResolvedValue({ statusCode: 200, body: 'this is a test' });
     const result = await supertest(app).get('/document-retrieval?vinNumber=1234&testNumber=1234');
 
-    expect(result.status).toBe(200);
-    expect(result.text).toBe('this is a test');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('this is a test');
   });
 
   it('adds the header returned from the getCertificate call', async () => {
@@ -91,8 +91,8 @@ describe('/document-retrieval', () => {
     (getPlate as jest.Mock) = jest.fn().mockResolvedValue({ statusCode: 200, body: 'this is a test' });
     const result = await supertest(app).get('/document-retrieval?plateSerialNumber=1234');
 
-    expect(result.status).toBe(200);
-    expect(result.text).toBe('this is a test');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('this is a test');
   });
 
   it('adds the header returned from the getPlate call', async () => {
@@ -113,8 +113,8 @@ describe('/document-retrieval', () => {
     (getLetter as jest.Mock) = jest.fn().mockResolvedValue({ statusCode: 200, body: 'this is a test' });
     const result = await supertest(app).get('/document-retrieval?vinNumber=1234&systemNumber=1234');
 
-    expect(result.status).toBe(200);
-    expect(result.text).toBe('this is a test');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('this is a test');
   });
 
   it('adds the header returned from the getLetter call', async () => {

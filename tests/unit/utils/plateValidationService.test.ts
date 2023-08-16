@@ -7,7 +7,7 @@ describe('Plate validation service', () => {
       plateSerialNumber: 'plate_123456',
     };
 
-    expect(validator(event)).toBe(true);
+    expect(validator(event)).toEqual(true);
   });
 
   it('should throw an error for an alphabetic character in the plate serial number', () => {

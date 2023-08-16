@@ -22,7 +22,7 @@ describe('S3 Plate Service', () => {
     const firstCall = mockGetObject.mock.calls[0] as S3.GetObjectRequest[];
     const firstArg = firstCall[0];
 
-    expect(firstArg.Key).toBe(`${folder}/${plateSerialNumber}.pdf`);
+    expect(firstArg.Key).toEqual(`${folder}/${plateSerialNumber}.pdf`);
   });
 
   it('passes the expected key to getObject if folder is undefined', async () => {
@@ -41,7 +41,7 @@ describe('S3 Plate Service', () => {
     const firstCall = mockGetObject.mock.calls[0] as S3.GetObjectRequest[];
     const firstArg = firstCall[0];
 
-    expect(firstArg.Key).toBe(`${plateSerialNumber}.pdf`);
+    expect(firstArg.Key).toEqual(`${plateSerialNumber}.pdf`);
   });
 
   it('passes the bucket to getObject', () => {
@@ -75,7 +75,7 @@ describe('S3 Plate Service', () => {
 
     mockS3.getObject = mockGetObject;
 
-    expect(await getFromS3(mockS3, bucket, folder, plateSerialNumber)).toBe('Success!');
+    expect(await getFromS3(mockS3, bucket, folder, plateSerialNumber)).toEqual('Success!');
   });
 
   it('throws an error if the response is not a PDF', async () => {

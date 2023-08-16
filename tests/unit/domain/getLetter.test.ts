@@ -13,7 +13,7 @@ describe('getLetter', () => {
     const response = await getLetter({} as LetterDetails, ({} as unknown) as S3, undefined, 'folder', 'test');
     const error = new MissingBucketNameError();
 
-    expect(response.statusCode).toBe(500);
+    expect(response.statusCode).toEqual(500);
     expect(response.body).toEqual(error.message);
   });
 
@@ -21,7 +21,7 @@ describe('getLetter', () => {
     const response = await getLetter({} as LetterDetails, ({} as unknown) as S3, 'bucket', undefined, 'test');
     const error = new MissingFolderNameError();
 
-    expect(response.statusCode).toBe(500);
+    expect(response.statusCode).toEqual(500);
     expect(response.body).toEqual(error.message);
   });
 
@@ -33,7 +33,7 @@ describe('getLetter', () => {
     const response = await getLetter(event, ({} as unknown) as S3, 'bucket', 'folder', 'test');
     const error = new SystemNumberError();
 
-    expect(response.statusCode).toBe(400);
+    expect(response.statusCode).toEqual(400);
     expect(response.body).toEqual(error.message);
   });
 
@@ -45,7 +45,7 @@ describe('getLetter', () => {
     const response = await getLetter(event, ({} as unknown) as S3, 'bucket', 'folder', 'test');
     const error = new VinError();
 
-    expect(response.statusCode).toBe(400);
+    expect(response.statusCode).toEqual(400);
     expect(response.body).toEqual(error.message);
   });
 
@@ -63,7 +63,7 @@ describe('getLetter', () => {
     const response = await getLetter(event, mockS3, 'bucket', 'folder', 'test');
     const error = new NoBodyError();
 
-    expect(response.statusCode).toBe(500);
+    expect(response.statusCode).toEqual(500);
     expect(response.body).toEqual(error.message);
   });
 
@@ -83,7 +83,7 @@ describe('getLetter', () => {
     const response = await getLetter(event, mockS3, 'bucket', 'folder', 'test');
     const error = new IncorrectFileTypeError();
 
-    expect(response.statusCode).toBe(404);
+    expect(response.statusCode).toEqual(404);
     expect(response.body).toEqual(error.message);
   });
 
@@ -100,8 +100,8 @@ describe('getLetter', () => {
     };
     const response = await getLetter(event, mockS3, 'bucket', 'folder', 'test');
 
-    expect(response.statusCode).toBe(404);
-    expect(response.body).toBe('NoSuchKey');
+    expect(response.statusCode).toEqual(404);
+    expect(response.body).toEqual('NoSuchKey');
   });
 
   it('returns an internal server error if the S3 get fails for any other reason', async () => {
@@ -117,8 +117,8 @@ describe('getLetter', () => {
     };
     const response = await getLetter(event, mockS3, 'bucket', 'folder', 'test');
 
-    expect(response.statusCode).toBe(500);
-    expect(response.body).toBe('Generic Error');
+    expect(response.statusCode).toEqual(500);
+    expect(response.body).toEqual('Generic Error');
   });
 
   it('returns a successful response if everything works', async () => {
@@ -136,8 +136,8 @@ describe('getLetter', () => {
     };
     const response = await getLetter(event, mockS3, 'bucket', 'folder', 'test');
 
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toBe('Letter Content');
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toEqual('Letter Content');
   });
 
   it('base64 encodes the response', async () => {
@@ -156,7 +156,7 @@ describe('getLetter', () => {
     };
     const response = await getLetter(event, mockS3, 'bucket', 'folder', 'test');
 
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toEqual(200);
     expect(response.body).toEqual(body.toString('base64'));
   });
 
@@ -175,7 +175,7 @@ describe('getLetter', () => {
     };
     const response = await getLetter(event, mockS3, 'bucket', undefined, 'local');
 
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toBe('Letter Content');
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toEqual('Letter Content');
   });
 });

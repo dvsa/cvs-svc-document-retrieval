@@ -8,7 +8,7 @@ describe('Letter validation service', () => {
       vin: 'JL12AAZ34U0300091',
     };
 
-    expect(validator(event)).toBe(true);
+    expect(validator(event)).toEqual(true);
   });
 
   it('should throw an error for an invalid system number', () => {

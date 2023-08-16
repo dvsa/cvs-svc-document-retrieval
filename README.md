@@ -4,7 +4,7 @@ Lambda to retrieve test certificates for commercial vehicles
 
 ## Dependencies
 
-The project runs on node 12.x with typescript and serverless framework. For further details about project dependencies, please refer to the `package.json` file.
+The project runs on node 18.x with typescript and serverless framework. For further details about project dependencies, please refer to the `package.json` file.
 [nvm](https://github.com/nvm-sh/nvm/blob/master/README.md) is used to managed node versions and configuration explicitely done per project using an `.npmrc` file.
 
 ## Running the project

@@ -6,7 +6,6 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'prettier',
-    'prettier/@typescript-eslint',
     '@dvsa/eslint-config-ts',
   ],
   rules: {

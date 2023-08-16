@@ -23,7 +23,7 @@ describe('S3 Certificate Service', () => {
     const firstCall = mockGetObject.mock.calls[0] as S3.GetObjectRequest[];
     const firstArg = firstCall[0];
 
-    expect(firstArg.Key).toEqual(`${folder}/${certNumber}_${vin}.pdf`);
+    expect(firstArg.Key).toBe(`${folder}/${certNumber}_${vin}.pdf`);
   });
 
   it('passes the expected key to getObject if folder is undefined', async () => {
@@ -43,7 +43,7 @@ describe('S3 Certificate Service', () => {
     const firstCall = mockGetObject.mock.calls[0] as S3.GetObjectRequest[];
     const firstArg = firstCall[0];
 
-    expect(firstArg.Key).toEqual(`${certNumber}_${vin}.pdf`);
+    expect(firstArg.Key).toBe(`${certNumber}_${vin}.pdf`);
   });
 
   it('passes the bucket to getObject', () => {
@@ -79,7 +79,7 @@ describe('S3 Certificate Service', () => {
 
     mockS3.getObject = mockGetObject;
 
-    expect(await getFromS3(mockS3, bucket, folder, certNumber, vin)).toEqual('Success!');
+    expect(await getFromS3(mockS3, bucket, folder, certNumber, vin)).toBe('Success!');
   });
 
   it('throws an error if the response is not a PDF', async () => {

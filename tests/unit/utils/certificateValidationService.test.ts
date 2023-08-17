@@ -8,7 +8,7 @@ describe('Certificate validation service', () => {
       vin: 'JL12AAZ34U0300091',
     };
 
-    expect(validator(event)).toEqual(true);
+    expect(validator(event)).toBe(true);
   });
 
   it('should throw an error for an invalid test number', () => {

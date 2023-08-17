@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-unsafe-argument */
+
 import { S3, AWSError } from 'aws-sdk';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import CertificateDetails from '../interfaces/CertificateDetails';
@@ -32,6 +34,7 @@ export default async (
     validate(event);
 
     const file = await getObjectFromS3(s3, bucketName, folder, event.testNumber, event.vin);
+    /* eslint-disable  @typescript-eslint/no-base-to-string */
     const response = file.toString('base64');
 
     const headers = {

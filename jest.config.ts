@@ -35,9 +35,6 @@ const config: Config.InitialOptions = {
       statements: 80,
     },
   },
-  globals: {
-    'ts-jest': {},
-  },
 };
 
 export default config;

@@ -36,8 +36,5 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Setup local dynamo
-        run: npm run tools-setup
-
       - name: Integration tests
         run: npm run test-i

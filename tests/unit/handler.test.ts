@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-unsafe-argument */
+
 import { APIGatewayEvent, Context } from 'aws-lambda';
 import { handler } from '../../src/handler';
 import * as Utils from '../../src/utils';
@@ -33,7 +35,7 @@ describe('Application entry', () => {
       event = { body: 'Test Body' };
 
       const response = await handler(event, context);
-      expect(response.statusCode).toEqual(200);
+      expect(response.statusCode).toBe(200);
       expect(typeof response.body).toBe('string');
     });
 
@@ -75,7 +77,7 @@ describe('Application entry', () => {
           // TODO we follow semver for code versioning ATM and only use the major for the API endpoint as v1
           const { API_VERSION } = process.env;
 
-          expect(response.statusCode).toEqual(200);
+          expect(response.statusCode).toBe(200);
           expect(parsedResponse.version).toBe(API_VERSION);
         });
       });

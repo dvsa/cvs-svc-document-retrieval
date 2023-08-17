@@ -1,3 +1,4 @@
+/* eslint-disable  @typescript-eslint/no-unsafe-argument */
 import { createMajorVersionNumber, createHandlerBasePath } from '../../../src/utils';
 
 describe("'Utils' file", () => {

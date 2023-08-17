@@ -1,3 +1,4 @@
+/* eslint-disable  @typescript-eslint/no-unsafe-argument */
 import { S3 } from 'aws-sdk';
 import getFromS3 from '../../../../src/infrastructure/s3/s3LetterService';
 
@@ -23,7 +24,7 @@ describe('S3 Letter Service', () => {
     const firstCall = mockGetObject.mock.calls[0] as S3.GetObjectRequest[];
     const firstArg = firstCall[0];
 
-    expect(firstArg.Key).toEqual(`${folder}/letter_${systemNumber}_${vin}.pdf`);
+    expect(firstArg.Key).toBe(`${folder}/letter_${systemNumber}_${vin}.pdf`);
   });
 
   it('passes the expected key to getObject if folder is undefined', async () => {
@@ -43,7 +44,7 @@ describe('S3 Letter Service', () => {
     const firstCall = mockGetObject.mock.calls[0] as S3.GetObjectRequest[];
     const firstArg = firstCall[0];
 
-    expect(firstArg.Key).toEqual(`letter_${systemNumber}_${vin}.pdf`);
+    expect(firstArg.Key).toBe(`letter_${systemNumber}_${vin}.pdf`);
   });
 
   it('passes the bucket to getObject', () => {
@@ -79,7 +80,7 @@ describe('S3 Letter Service', () => {
 
     mockS3.getObject = mockGetObject;
 
-    expect(await getFromS3(mockS3, bucket, folder, systemNumber, vin)).toEqual('Success!');
+    expect(await getFromS3(mockS3, bucket, folder, systemNumber, vin)).toBe('Success!');
   });
 
   it('throws an error if the response is not a PDF', async () => {

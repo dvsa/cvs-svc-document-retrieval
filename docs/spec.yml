@@ -1,0 +1,157 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Document Retrieval API
+paths:
+  /:
+    get:
+      summary: Debug Route
+      responses:
+        '200':
+          description: OK
+
+  /version:
+    get:
+      summary: Get API Version
+      responses:
+        '200':
+          description: OK
+
+  /document-retrieval:
+    get:
+      summary: Retrieve a Document
+      parameters:
+        - name: vinNumber
+          in: query
+          description: VIN number
+          required: false
+          schema:
+            type: string
+        - name: testNumber
+          in: query
+          description: Test number
+          required: false
+          schema:
+            type: string
+        - name: plateSerialNumber
+          in: query
+          description: Plate serial number
+          required: false
+          schema:
+            type: string
+        - name: systemNumber
+          in: query
+          description: System number
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Document Retrieved Successfully
+          content:
+            application/pdf:
+              schema:
+                type: string
+              example: Base64-encoded PDF content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: Bad request
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: Not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: Internal server error
+
+  /getCertificate:
+    get:
+      summary: Get a Certificate
+      parameters:
+        - name: vinNumber
+          in: query
+          description: VIN number
+          required: true
+          schema:
+            type: string
+        - name: testNumber
+          in: query
+          description: Test number
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Certificate Retrieved Successfully
+          content:
+            application/pdf:
+              schema:
+                type: string
+              example: Base64-encoded PDF content
+
+  /getLetter:
+    get:
+      summary: Get a Letter
+      parameters:
+        - name: vinNumber
+          in: query
+          description: VIN number
+          required: true
+          schema:
+            type: string
+        - name: systemNumber
+          in: query
+          description: System number
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Letter Retrieved Successfully
+          content:
+            application/pdf:
+              schema:
+                type: string
+              example: Base64-encoded PDF content
+
+  /getPlate:
+    get:
+      summary: Get a Plate
+      parameters:
+        - name: plateSerialNumber
+          in: query
+          description: Plate serial number
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Plate Retrieved Successfully
+          content:
+            application/pdf:
+              schema:
+                type: string
+              example: Base64-encoded PDF content

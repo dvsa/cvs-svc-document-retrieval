@@ -45,3 +45,6 @@ reports
 .vscode/
 
 buckets/
+
+# Idea specific hidden files
+ .idea/**

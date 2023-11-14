@@ -27,18 +27,21 @@ paths:
           required: false
           schema:
             type: string
+            pattern: '^[a-zA-Z0-9]*$'
         - name: testNumber
           in: query
           description: Test number
           required: false
           schema:
             type: string
+            pattern: '^[a-zA-Z]\d{2}[a-zA-Z]\d{5}$'
         - name: plateSerialNumber
           in: query
           description: Plate serial number
           required: false
           schema:
             type: string
+            pattern: '/^plate_[0-9]{1,12}$/'
         - name: systemNumber
           in: query
           description: System number
@@ -97,12 +100,14 @@ paths:
           required: true
           schema:
             type: string
+            pattern: '^[a-zA-Z0-9]*$'
         - name: testNumber
           in: query
           description: Test number
           required: true
           schema:
             type: string
+            pattern: '^[a-zA-Z]\d{2}[a-zA-Z]\d{5}$'
       responses:
         '200':
           description: Certificate Retrieved Successfully
@@ -122,6 +127,7 @@ paths:
           required: true
           schema:
             type: string
+            pattern: '^[a-zA-Z0-9]*$'
         - name: systemNumber
           in: query
           description: System number
@@ -147,6 +153,7 @@ paths:
           required: true
           schema:
             type: string
+            pattern: '/^plate_[0-9]{1,12}$/'
       responses:
         '200':
           description: Plate Retrieved Successfully

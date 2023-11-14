@@ -55,7 +55,6 @@ paths:
             application/pdf:
               schema:
                 type: string
-              example: Base64-encoded PDF content
         '400':
           description: Bad Request
           content:
@@ -115,8 +114,6 @@ paths:
             application/pdf:
               schema:
                 type: string
-              example: Base64-encoded PDF content
-
   /getLetter:
     get:
       summary: Get a Letter
@@ -141,8 +138,6 @@ paths:
             application/pdf:
               schema:
                 type: string
-              example: Base64-encoded PDF content
-
   /getPlate:
     get:
       summary: Get a Plate
@@ -161,4 +156,3 @@ paths:
             application/pdf:
               schema:
                 type: string
-              example: Base64-encoded PDF content

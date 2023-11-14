@@ -90,6 +90,7 @@ app.get('/document-retrieval', (req: Request, res: Response) => {
   } else if (!req.query.plateSerialNumber && req.query.vinNumber && !req.query.testNumber && req.query.systemNumber) {
     console.info('Calling letter service');
 
+    
     getLetter(
       {
         vin: req.query.vinNumber as string,

@@ -16,10 +16,10 @@ app.get('/version', (_request, res) => {
 
 app.get('/document-retrieval', (req: Request, res: Response) => {
   const {
-    vinNumber, plateSerialNumber, testNumber, systemNumber,
+    vinNumber, plateSerialNumber, testNumber, systemNumber, fileName
   } = req.query;
 
-  documentRequestFactory(vinNumber as string, testNumber as string, plateSerialNumber as string, systemNumber as string)
+  documentRequestFactory(vinNumber as string, testNumber as string, plateSerialNumber as string, systemNumber as string, fileName as string)
     .then(({ statusCode, headers, body }) => {
       res.status(statusCode);
 

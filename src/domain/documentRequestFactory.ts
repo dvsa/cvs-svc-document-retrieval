@@ -3,12 +3,13 @@ import { APIGatewayProxyResult } from 'aws-lambda';
 import getCertificate from './getCertificate';
 import getLetter from './getLetter';
 import getPlate from './getPlate';
+import getFile from './getFile';
 
 const {
   NODE_ENV, BUCKET, BRANCH,
 } = process.env;
 
-export default async (vin: string, testNumber: string, plateSerialNumber: string, systemNumber: string): Promise<APIGatewayProxyResult> => {
+export default async (vin: string, testNumber: string, plateSerialNumber: string, systemNumber: string, fileName: string): Promise<APIGatewayProxyResult> => {
   const s3 = new S3(
     process.env.IS_OFFLINE && {
       s3ForcePathStyle: true,
@@ -19,9 +20,10 @@ export default async (vin: string, testNumber: string, plateSerialNumber: string
     },
   );
 
-  const isCertificate = vin && testNumber && !plateSerialNumber && !systemNumber;
-  const isPlate = plateSerialNumber && !vin && !testNumber && !systemNumber;
-  const isLetter = !plateSerialNumber && vin && !testNumber && systemNumber;
+  const isCertificate = vin && testNumber && !plateSerialNumber && !systemNumber && !fileName;
+  const isPlate = plateSerialNumber && !vin && !testNumber && !systemNumber && !fileName;
+  const isLetter = !plateSerialNumber && vin && !testNumber && systemNumber && !fileName;
+  const isFile = fileName && !plateSerialNumber && !vin && !testNumber && !systemNumber;
 
   if (isCertificate) {
     console.info('Calling cert service');
@@ -56,6 +58,19 @@ export default async (vin: string, testNumber: string, plateSerialNumber: string
       {
         vin,
         systemNumber,
+      },
+      s3,
+      `cvs-cert-${BUCKET}`,
+      BRANCH,
+      NODE_ENV,
+    );
+  }
+
+  if (isFile) {
+    console.info('Calling file retrieval service');
+    return getFile(
+      {
+        fileName,
       },
       s3,
       `cvs-cert-${BUCKET}`,

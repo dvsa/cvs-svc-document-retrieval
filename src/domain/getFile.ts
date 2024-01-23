@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-base-to-string */
+
 import { S3, AWSError } from 'aws-sdk';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import getObjectFromS3 from '../infrastructure/s3/s3PlateService';

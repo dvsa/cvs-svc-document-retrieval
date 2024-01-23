@@ -30,9 +30,9 @@ export default async (
     }
 
     console.log(`Validating: ${event.fileName}`);
-    
-    if(!event.fileName) {
-        throw new FileNameError();
+
+    if (!event.fileName) {
+      throw new FileNameError();
     }
 
     const file = await getObjectFromS3(s3, bucketName, folder, event.fileName);

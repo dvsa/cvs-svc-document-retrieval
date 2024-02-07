@@ -39,11 +39,11 @@ jobs:
       - name: Integration tests
         run: npm run test-i
 
-scanner:
-  permissions:
-    id-token: write
-  runs-on: X64
-  steps:
+  scanner:
+    permissions:
+      id-token: write
+    runs-on: X64
+    steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:

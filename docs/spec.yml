@@ -54,6 +54,12 @@ paths:
           required: false
           schema:
             type: string
+        - name: adrDocumentId
+          in: query
+          description: ADR Document ID
+          required: false
+          schema:
+            type: string
 
       responses:
         '200':

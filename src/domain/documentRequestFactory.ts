@@ -4,12 +4,13 @@ import getCertificate from './getCertificate';
 import getLetter from './getLetter';
 import getPlate from './getPlate';
 import getFile from './getFile';
+import getZip from './getZip';
 
 const {
   NODE_ENV, BUCKET, BRANCH,
 } = process.env;
 
-export default async (vin: string, testNumber: string, plateSerialNumber: string, systemNumber: string, fileName: string): Promise<APIGatewayProxyResult> => {
+export default async (vin: string, testNumber: string, plateSerialNumber: string, systemNumber: string, fileName: string, adrDocumentId: string): Promise<APIGatewayProxyResult> => {
   const s3 = new S3(
     process.env.IS_OFFLINE && {
       s3ForcePathStyle: true,
@@ -20,10 +21,11 @@ export default async (vin: string, testNumber: string, plateSerialNumber: string
     },
   );
 
-  const isCertificate = vin && testNumber && !plateSerialNumber && !systemNumber && !fileName;
-  const isPlate = plateSerialNumber && !vin && !testNumber && !systemNumber && !fileName;
-  const isLetter = !plateSerialNumber && vin && !testNumber && systemNumber && !fileName;
-  const isFile = fileName && !plateSerialNumber && !vin && !testNumber && !systemNumber;
+  const isCertificate = vin && testNumber && !plateSerialNumber && !systemNumber && !fileName && !adrDocumentId;
+  const isPlate = plateSerialNumber && !vin && !testNumber && !systemNumber && !fileName && !adrDocumentId;
+  const isLetter = !plateSerialNumber && vin && !testNumber && systemNumber && !fileName && !adrDocumentId;
+  const isFile = fileName && !plateSerialNumber && !vin && !testNumber && !systemNumber && !adrDocumentId;
+  const isZip = adrDocumentId && !plateSerialNumber && !vin && !testNumber && !systemNumber && !fileName;
 
   if (isCertificate) {
     console.info('Calling cert service');
@@ -75,6 +77,19 @@ export default async (vin: string, testNumber: string, plateSerialNumber: string
       s3,
       `cvs-cert-${BUCKET}`,
       BRANCH,
+      NODE_ENV,
+    );
+  }
+
+  if (isZip) {
+    console.info('Calling zip retrieval service');
+    return getZip(
+      {
+        adrDocumentId,
+      },
+      s3,
+      `cvs-cert-${BUCKET}`,
+      BRANCH.concat('/adr-documents'),
       NODE_ENV,
     );
   }

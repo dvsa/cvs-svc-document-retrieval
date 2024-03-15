@@ -4,6 +4,7 @@ import { app } from '../../../../src/infrastructure/api';
 import getCertificate from '../../../../src/domain/getCertificate';
 import getPlate from '../../../../src/domain/getPlate';
 import getLetter from '../../../../src/domain/getLetter';
+import getZip from '../../../../src/domain/getZip';
 
 // TODO Define Mock strategy
 describe('API', () => {
@@ -130,5 +131,28 @@ describe('/document-retrieval', () => {
 
     expect(result.headers).toHaveProperty('content-type');
     expect(result.get('content-type')).toContain('application/pdf');
+  });
+
+  it('returns the expected body and status from the getZip call', async () => {
+    process.env.NODE_ENV = 'local';
+    (getZip as jest.Mock) = jest.fn().mockResolvedValue({ statusCode: 200, body: 'this is a test' });
+    const result = await supertest(app).get('/document-retrieval?adrDocumentId=1234');
+
+    expect(result.status).toBe(200);
+    expect(result.text).toBe('this is a test');
+  });
+
+  it('adds the header returned from the getZip call', async () => {
+    (getZip as jest.Mock) = jest.fn().mockResolvedValue({
+      statusCode: 200,
+      body: 'this is a test',
+      headers: {
+        'Content-Type': 'application/zip',
+      },
+    });
+    const result = await supertest(app).get('/document-retrieval?adrDocumentId=1234');
+
+    expect(result.headers).toHaveProperty('content-type');
+    expect(result.get('content-type')).toContain('application/zip');
   });
 });

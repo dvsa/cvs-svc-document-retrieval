@@ -89,7 +89,7 @@ export default async (vin: string, testNumber: string, plateSerialNumber: string
       },
       s3,
       `cvs-cert-${BUCKET}`,
-      BRANCH.concat('/adr-documents'),
+      `${BRANCH}/adr-documents`,
       NODE_ENV,
     );
   }

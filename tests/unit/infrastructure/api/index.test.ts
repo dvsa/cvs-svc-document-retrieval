@@ -5,6 +5,7 @@ import getCertificate from '../../../../src/domain/getCertificate';
 import getPlate from '../../../../src/domain/getPlate';
 import getLetter from '../../../../src/domain/getLetter';
 import getZip from '../../../../src/domain/getZip';
+import getFile from "../../../../src/domain/getFile";
 
 // TODO Define Mock strategy
 describe('API', () => {
@@ -133,6 +134,27 @@ describe('/document-retrieval', () => {
     expect(result.get('content-type')).toContain('application/pdf');
   });
 
+  it('returns the expected body and status from the getFile call', async () => {
+    (getFile as jest.Mock) = jest.fn().mockResolvedValue({ statusCode: 200, body: 'this is a test' });
+    const result = await supertest(app).get('/document-retrieval?fileName=abc123');
+    expect(result.status).toBe(200);
+    expect(result.text).toBe('this is a test');
+  });
+
+  it('adds the header returned from the getFile call', async () => {
+    (getFile as jest.Mock) = jest.fn().mockResolvedValue({
+      statusCode: 200,
+      body: 'this is a test',
+      headers: {
+        'Content-Type': 'application/zip',
+      },
+    });
+    const result = await supertest(app).get('/document-retrieval?fileName=abc123');
+
+    expect(result.headers).toHaveProperty('content-type');
+    expect(result.get('content-type')).toContain('application/zip');
+  });
+
   it('returns the expected body and status from the getZip call', async () => {
     (getZip as jest.Mock) = jest.fn().mockResolvedValue({ statusCode: 200, body: 'this is a test' });
     const result = await supertest(app).get('/document-retrieval?adrDocumentId=1234');
@@ -153,5 +175,11 @@ describe('/document-retrieval', () => {
 
     expect(result.headers).toHaveProperty('content-type');
     expect(result.get('content-type')).toContain('application/zip');
+  });
+
+  it('should catch error and log error message', async () => {
+    (getCertificate as jest.Mock) = jest.fn().mockRejectedValue(new Error('Error message'));
+    const result = await supertest(app).get('/document-retrieval?vinNumber=1234&testNumber=1234');
+    expect(result.status).toBe(500);
   });
 });

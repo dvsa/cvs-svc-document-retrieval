@@ -22,7 +22,7 @@ describe('S3 Zip Service', () => {
     const firstCall = mockGetObject.mock.calls[0] as S3.GetObjectRequest[];
     const firstArg = firstCall[0];
 
-    expect(firstArg.Key).toBe(`${folder}/${fileName}.zip`);
+    expect(firstArg.Key).toBe(`${folder}/adr-documents/${fileName}.zip`);
   });
 
   it('passes the expected key to getObject if folder is undefined', async () => {
@@ -42,7 +42,7 @@ describe('S3 Zip Service', () => {
     const firstCall = mockGetObject.mock.calls[0] as S3.GetObjectRequest[];
     const firstArg = firstCall[0];
 
-    expect(firstArg.Key).toBe(`${fileName}.zip`);
+    expect(firstArg.Key).toBe(`/adr-documents/${fileName}.zip`);
   });
 
   it('passes the bucket to getObject', () => {

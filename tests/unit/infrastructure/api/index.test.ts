@@ -134,7 +134,6 @@ describe('/document-retrieval', () => {
   });
 
   it('returns the expected body and status from the getZip call', async () => {
-    process.env.NODE_ENV = 'local';
     (getZip as jest.Mock) = jest.fn().mockResolvedValue({ statusCode: 200, body: 'this is a test' });
     const result = await supertest(app).get('/document-retrieval?adrDocumentId=1234');
 

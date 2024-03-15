@@ -5,7 +5,7 @@ import getCertificate from '../../../../src/domain/getCertificate';
 import getPlate from '../../../../src/domain/getPlate';
 import getLetter from '../../../../src/domain/getLetter';
 import getZip from '../../../../src/domain/getZip';
-import getFile from "../../../../src/domain/getFile";
+import getFile from '../../../../src/domain/getFile';
 
 // TODO Define Mock strategy
 describe('API', () => {
@@ -177,9 +177,13 @@ describe('/document-retrieval', () => {
     expect(result.get('content-type')).toContain('application/zip');
   });
 
-  it('should catch error and log error message', async () => {
-    (getCertificate as jest.Mock) = jest.fn().mockRejectedValue(new Error('Error message'));
-    const result = await supertest(app).get('/document-retrieval?vinNumber=1234&testNumber=1234');
+  it('should catch error, log message and return status code 500', async () => {
+    const logSpy = jest.spyOn(console, 'error');
+    (getZip as jest.Mock) = jest.fn().mockRejectedValue(new Error('Error message'));
+    const result = await supertest(app).get('/document-retrieval?adrDocumentId=1234');
+    expect(logSpy).toHaveBeenCalledTimes(1);
+    expect(logSpy).toHaveBeenCalledWith('Error message');
     expect(result.status).toBe(500);
+    logSpy.mockClear();
   });
 });

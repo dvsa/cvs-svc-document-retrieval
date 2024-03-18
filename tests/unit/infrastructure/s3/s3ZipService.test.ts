@@ -28,7 +28,7 @@ describe('S3 Zip Service', () => {
   it('passes the expected key to getObject if folder is undefined', async () => {
     const mockS3 = ({} as unknown) as S3;
     const bucket = 'bucket';
-    const folder = undefined;
+    const folder: string | undefined = undefined;
     const adrDocumentId = '1234';
     const mockPromise = jest
       .fn()
@@ -36,7 +36,6 @@ describe('S3 Zip Service', () => {
     const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
 
     mockS3.getObject = mockGetObject;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     await getFromS3(mockS3, bucket, folder, adrDocumentId).catch(() => {});
 
     const firstCall = mockGetObject.mock.calls[0] as S3.GetObjectRequest[];

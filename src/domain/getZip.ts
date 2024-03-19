@@ -1,13 +1,13 @@
 /* eslint-disable  @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-base-to-string */
 
-import { S3, AWSError } from 'aws-sdk';
 import { APIGatewayProxyResult } from 'aws-lambda';
-import getObjectFromS3 from '../infrastructure/s3/s3ZipService';
-import NoBodyError from '../errors/NoBodyError';
-import MissingBucketNameError from '../errors/MissingBucketNameError';
-import IncorrectFileTypeError from '../errors/IncorrectFileTypeError';
-import MissingFolderNameError from '../errors/MissingFolderNameError';
+import { AWSError, S3 } from 'aws-sdk';
 import FileNameError from '../errors/FileNameError';
+import IncorrectFileTypeError from '../errors/IncorrectFileTypeError';
+import MissingBucketNameError from '../errors/MissingBucketNameError';
+import MissingFolderNameError from '../errors/MissingFolderNameError';
+import NoBodyError from '../errors/NoBodyError';
+import getObjectFromS3 from '../infrastructure/s3/s3ZipService';
 import ZipDetails from '../interfaces/ZipDetails';
 
 function isAWSError(error: Error | AWSError): error is AWSError {
@@ -35,11 +35,12 @@ export default async (
       throw new FileNameError();
     }
 
+    // This is actually a unsigned URL that can be used to retrieve the file contents
     const file = await getObjectFromS3(s3, bucketName, folder, event.adrDocumentId);
     const response = file.toString('base64');
 
     const headers = {
-      'Content-type': 'application/zip',
+      'Content-type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true,
       'X-Content-Type-Options': 'nosniff',

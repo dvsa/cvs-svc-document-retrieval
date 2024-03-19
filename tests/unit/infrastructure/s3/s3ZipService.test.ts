@@ -6,61 +6,61 @@ describe('S3 Zip Service', () => {
     jest.resetAllMocks().restoreAllMocks();
   });
 
-  it('passes the expected key to getObject if folder is defined', async () => {
+  it('passes the expected key to getSignedUrl if folder is defined', async () => {
     const mockS3 = ({} as unknown) as S3;
     const bucket = 'bucket';
     const folder = 'folder';
     const adrDocumentId = '1234';
     const mockPromise = jest
       .fn()
-      .mockResolvedValue({ Body: 'Success!', ContentType: 'application/octet-stream' });
-    const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
+      .mockResolvedValue({ Body: 'Success!', ContentType: 'application/json' });
+    const mockGetSignedUrlPromise = jest.fn().mockReturnValue({ promise: mockPromise });
 
-    mockS3.getObject = mockGetObject;
+    mockS3.getSignedUrlPromise = mockGetSignedUrlPromise;
     await getFromS3(mockS3, bucket, folder, adrDocumentId).catch(() => {});
 
-    const firstCall = mockGetObject.mock.calls[0] as S3.GetObjectRequest[];
+    const firstCall = mockGetSignedUrlPromise.mock.calls[0] as S3.GetObjectRequest[];
     const firstArg = firstCall[0];
 
-    expect(firstArg.Key).toBe(`${folder}/adr-documents/${adrDocumentId}.zip`);
+    expect(firstArg).toBe('getObject');
   });
 
-  it('passes the expected key to getObject if folder is undefined', async () => {
+  it('passes the expected key to getSignedUrl if folder is undefined', async () => {
     const mockS3 = ({} as unknown) as S3;
     const bucket = 'bucket';
     const folder: string | undefined = undefined;
     const adrDocumentId = '1234';
     const mockPromise = jest
       .fn()
-      .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/octet-stream' }));
-    const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
+      .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/json' }));
+    const mockGetSignedUrlPromise = jest.fn().mockReturnValue({ promise: mockPromise });
 
-    mockS3.getObject = mockGetObject;
+    mockS3.getSignedUrlPromise = mockGetSignedUrlPromise;
     await getFromS3(mockS3, bucket, folder, adrDocumentId).catch(() => {});
 
-    const firstCall = mockGetObject.mock.calls[0] as S3.GetObjectRequest[];
+    const firstCall = mockGetSignedUrlPromise.mock.calls[0] as S3.GetObjectRequest[];
     const firstArg = firstCall[0];
 
-    expect(firstArg.Key).toBe(`/adr-documents/${adrDocumentId}.zip`);
+    expect(firstArg).toBe('getObject');
   });
 
-  it('passes the bucket to getObject', () => {
+  it('passes the bucket to getSignedUrl', () => {
     const mockS3 = ({} as unknown) as S3;
     const bucket = 'bucket';
     const folder = 'folder';
     const adrDocumentId = '1234';
     const mockPromise = jest
       .fn()
-      .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/octet-stream' }));
-    const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
+      .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/json' }));
+    const mockGetSignedUrlPromise = jest.fn().mockReturnValue({ promise: mockPromise });
 
-    mockS3.getObject = mockGetObject;
+    mockS3.getSignedUrlPromise = mockGetSignedUrlPromise;
     getFromS3(mockS3, bucket, folder, adrDocumentId).catch(() => {});
 
-    const firstCall = mockGetObject.mock.calls[0] as S3.GetObjectRequest[];
-    const firstArg = firstCall[0];
+    const firstCall = mockGetSignedUrlPromise.mock.calls[0] as S3.GetObjectRequest[];
+    const secondArg = firstCall[1];
 
-    expect(firstArg.Bucket).toEqual(bucket);
+    expect(secondArg.Bucket).toEqual(bucket);
   });
 
   it('returns the expected output', async () => {
@@ -68,27 +68,11 @@ describe('S3 Zip Service', () => {
     const bucket = 'bucket';
     const folder = 'folder';
     const adrDocumentId = '1234';
-    const mockPromise = jest
-      .fn()
-      .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/octet-stream' }));
-    const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
+    const mockGetSignedUrlPromise = jest.fn().mockReturnValue('Success!');
 
-    mockS3.getObject = mockGetObject;
+    mockS3.getSignedUrlPromise = mockGetSignedUrlPromise;
 
     expect(await getFromS3(mockS3, bucket, folder, adrDocumentId)).toBe('Success!');
-  });
-
-  it('throws an error if the response is not a ZIP', async () => {
-    const mockS3 = ({} as unknown) as S3;
-    const bucket = 'bucket';
-    const folder = 'folder';
-    const adrDocumentId = '1234';
-    const mockPromise = jest.fn().mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'image/jpg' }));
-    const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
-
-    mockS3.getObject = mockGetObject;
-
-    await expect(getFromS3(mockS3, bucket, folder, adrDocumentId)).rejects.toThrow();
   });
 
   it('throws an error if there is no body in the response', async () => {
@@ -96,10 +80,9 @@ describe('S3 Zip Service', () => {
     const bucket = 'bucket';
     const folder = 'folder';
     const adrDocumentId = '1234';
-    const mockPromise = jest.fn().mockReturnValue(Promise.resolve({ ContentType: 'application/octet-stream' }));
-    const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
+    const mockGetSignedUrlPromise = jest.fn().mockReturnValue(undefined);
 
-    mockS3.getObject = mockGetObject;
+    mockS3.getSignedUrlPromise = mockGetSignedUrlPromise;
 
     await expect(getFromS3(mockS3, bucket, folder, adrDocumentId)).rejects.toThrow();
   });

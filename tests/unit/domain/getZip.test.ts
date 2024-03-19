@@ -73,7 +73,7 @@ describe('getZip', () => {
 
   it('returns a not found error if the file is not found', async () => {
     const mockS3 = ({} as unknown) as S3;
-    const mockPromise = jest.fn().mockReturnValue(Promise.reject(({ code: 'NoSuchKey' } as unknown) as Error));
+    const mockPromise = jest.fn().mockReturnValue(Promise.reject(({ code: 'NoSuchKey' } as unknown) as Error)); // eslint-disable-line prefer-promise-reject-errors
     const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
 
     mockS3.getObject = mockGetObject;
@@ -89,7 +89,7 @@ describe('getZip', () => {
 
   it('returns an internal server error if the S3 get fails for any other reason', async () => {
     const mockS3 = ({} as unknown) as S3;
-    const mockPromise = jest.fn().mockReturnValue(Promise.reject(({ code: 'Generic Error' } as unknown) as Error));
+    const mockPromise = jest.fn().mockReturnValue(Promise.reject(({ code: 'Generic Error' } as unknown) as Error)); // eslint-disable-line prefer-promise-reject-errors
     const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
 
     mockS3.getObject = mockGetObject;

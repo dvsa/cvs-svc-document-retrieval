@@ -4,8 +4,6 @@ import { Context, APIGatewayEvent, APIGatewayProxyStructuredResultV2 } from 'aws
 import { app } from './infrastructure/api';
 
 const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyStructuredResultV2> => {
-  console.log(event);
-
   return serverless(app, {
     /**
      * We proxy requests from / as <stage> is handled in APIG when we deploy.

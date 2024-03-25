@@ -1,4 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-unsafe-argument */
 import { Readable } from 'stream';
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { sdkStreamMixin } from '@smithy/util-stream';
@@ -36,6 +35,7 @@ describe('S3 Certificate Service', () => {
     const vin = 'VIN2345AB';
     const mockS3Client = mockClient(S3Client);
     const s3 = new S3Client({});
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     await getFromS3(s3, bucket, folder, certNumber, vin).catch(() => {});
 
     const s3GetObjectStub = mockS3Client.commandCalls(GetObjectCommand);
@@ -55,10 +55,13 @@ describe('S3 Certificate Service', () => {
     stream.push('Success!');
     stream.push(null); // end of stream
     const sdkStream = sdkStreamMixin(stream);
+
     const mockS3Client = mockClient(S3Client);
     const s3 = new S3Client({});
+
     mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'application/octet-stream' });
     const responseBody = await getFromS3(s3, bucket, folder, certNumber, vin);
+
     expect(await responseBody.transformToString()).toBe('Success!');
   });
 

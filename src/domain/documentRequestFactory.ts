@@ -1,4 +1,4 @@
-import AWS, { S3 } from 'aws-sdk';
+import { S3Client } from '@aws-sdk/client-s3';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import getCertificate from './getCertificate';
 import getLetter from './getLetter';
@@ -9,15 +9,15 @@ const {
 } = process.env;
 
 export default async (vin: string, testNumber: string, plateSerialNumber: string, systemNumber: string): Promise<APIGatewayProxyResult> => {
-  const s3 = new S3(
-    process.env.IS_OFFLINE && {
-      s3ForcePathStyle: true,
-      // You will need to create your s3local profile (~/.aws/credentials) if you are not using any
+  const s3 = new S3Client(process.env.IS_OFFLINE && {
+    forcePathStyle: true,
+    // You will need to create your s3local profile (~/.aws/credentials) if you are not using any
+    credentials: {
       accessKeyId: 'S3RVER',
       secretAccessKey: 'S3RVER',
-      endpoint: new AWS.Endpoint('http://localhost:4569'),
     },
-  );
+    endpoint: 'http://localhost:4569',
+  });
 
   const isCertificate = vin && testNumber && !plateSerialNumber && !systemNumber;
   const isPlate = plateSerialNumber && !vin && !testNumber && !systemNumber;

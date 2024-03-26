@@ -13,7 +13,7 @@ import IncorrectFileTypeError from '../errors/IncorrectFileTypeError';
 import MissingFolderNameError from '../errors/MissingFolderNameError';
 
 function isAWSError(error: Error | ServiceException): error is ServiceException {
-  return Object.prototype.hasOwnProperty.call(error, 'code') as boolean;
+  return Object.prototype.hasOwnProperty.call(error, 'name') as boolean;
 }
 
 export default async (
@@ -35,6 +35,7 @@ export default async (
 
     const file = await getObjectFromS3(s3, bucketName, folder, event.testNumber, event.vin);
     const response = await file.transformToString('base64');
+    console.log(response);
 
     const headers = {
       'Content-type': 'application/pdf',

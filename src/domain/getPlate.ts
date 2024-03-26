@@ -12,7 +12,7 @@ import MissingFolderNameError from '../errors/MissingFolderNameError';
 import PlateSerialNumberError from '../errors/PlateSerialNumberError';
 
 function isAWSError(error: Error | ServiceException): error is ServiceException {
-  return Object.prototype.hasOwnProperty.call(error, 'code') as boolean;
+  return Object.prototype.hasOwnProperty.call(error, 'name') as boolean;
 }
 
 export default async (

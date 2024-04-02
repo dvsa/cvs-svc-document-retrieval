@@ -3,7 +3,7 @@
 import { ServiceException } from '@smithy/smithy-client';
 import { S3Client } from '@aws-sdk/client-s3';
 import { APIGatewayProxyResult } from 'aws-lambda';
-import getObjectFromS3 from '../infrastructure/s3/s3PlateService';
+import getObjectFromS3 from '../infrastructure/s3/s3FileService';
 import NoBodyError from '../errors/NoBodyError';
 import MissingBucketNameError from '../errors/MissingBucketNameError';
 import IncorrectFileTypeError from '../errors/IncorrectFileTypeError';

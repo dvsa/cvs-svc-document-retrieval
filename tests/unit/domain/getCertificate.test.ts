@@ -77,7 +77,7 @@ describe('getCertificate', () => {
     stream.push(null); // end of stream
     const sdkStream = sdkStreamMixin(stream);
 
-    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'image/png' });
+    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'image/jpg' });
 
     const event: CertificateDetails = {
       testNumber: 'W10I02544',
@@ -141,29 +141,8 @@ describe('getCertificate', () => {
     const response = await getCertificate(event, s3, 'bucket', 'folder', 'test');
 
     expect(response.statusCode).toBe(200);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
     expect(response.body).toBe(body.toString('base64'));
   });
-
-  // it('base64 encodes the response', async () => {
-  //   const mockS3 = ({} as unknown) as S3;
-  //   const body = Buffer.from('Certificate Content');
-  //   const mockPromise = jest
-  //     .fn()
-  //     .mockReturnValue(Promise.resolve({ Body: body, ContentType: 'application/octet-stream' }));
-  //   const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
-
-  //   mockS3.getObject = mockGetObject;
-
-  //   const event: CertificateDetails = {
-  //     testNumber: 'W10I02544',
-  //     vin: 'JN21AAZ34U0200098',
-  //   };
-  //   const response = await getCertificate(event, mockS3, 'bucket', 'folder', 'test');
-
-  //   expect(response.statusCode).toBe(200);
-  //   expect(response.body).toEqual(body.toString('base64'));
-  // });
 
   it('ignores the folder check if the current environment is "local". Required for local testing', async () => {
     // const mockS3 = ({} as unknown) as S3;

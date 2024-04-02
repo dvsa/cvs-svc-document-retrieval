@@ -52,7 +52,7 @@ export default async (
       headers,
       statusCode: 200,
       body: file,
-      isBase64Encoded: false,
+      isBase64Encoded: true,
     };
   } catch (e) {
     let code = 500;

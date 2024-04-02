@@ -3,11 +3,8 @@ import serverless from 'serverless-http';
 import { Context, APIGatewayEvent, APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 import { app } from './infrastructure/api';
 
-const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyStructuredResultV2> => {
-  console.log(event);
-
-  return serverless(app, {
-    /**
+const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyStructuredResultV2> => serverless(app, {
+  /**
      * We proxy requests from / as <stage> is handled in APIG when we deploy.
      * With with serverless-offline we proxy requests from /v<x> from the client -
      * The package.json version as single source of truth to be the app basePath with stage
@@ -30,9 +27,8 @@ const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGat
      *
      * We use express Router to proxy redirect requests from /v<x>/
      */
-    // basePath: `${AWS_PROVIDER_STAGE}/${MAJOR_VERSION}`,
-    basePath: 'v1',
-  })(event, context);
-};
+  // basePath: `${AWS_PROVIDER_STAGE}/${MAJOR_VERSION}`,
+  basePath: 'v1',
+})(event, context);
 
 export { handler };

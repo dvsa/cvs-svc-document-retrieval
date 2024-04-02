@@ -10,6 +10,14 @@ describe('Plate validation service', () => {
     expect(validator(event)).toBe(true);
   });
 
+  it('should pass a valid plate serial number in UUID format', () => {
+    const event: PlateDetails = {
+      plateSerialNumber: 'plate_73d2bf1b-e5b4-4dd6-82df-274ea5fe17ea',
+    };
+
+    expect(validator(event)).toBe(true);
+  });
+
   it('should throw an error for an alphabetic character in the plate serial number', () => {
     const event: PlateDetails = {
       plateSerialNumber: 'plate_A123456',

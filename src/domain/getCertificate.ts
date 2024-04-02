@@ -31,11 +31,11 @@ export default async (
       throw new MissingFolderNameError();
     }
 
+    console.log(`Validating: ${event.testNumber} - ${event.vin}`);
     validate(event);
 
     const file = await getObjectFromS3(s3, bucketName, folder, event.testNumber, event.vin);
     const response = await file.transformToString('base64');
-    console.log(response);
 
     const headers = {
       'Content-type': 'application/pdf',

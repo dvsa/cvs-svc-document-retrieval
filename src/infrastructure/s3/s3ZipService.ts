@@ -8,7 +8,7 @@ export default async (
   folder: string | undefined,
   adrDocumentId: string,
 ): Promise<string> => {
-  const key = folder ? `${folder}/adr-documents/${adrDocumentId}.zip` : `/adr-documents/${adrDocumentId}.zip`;
+  const key = folder ? `${folder}/adr-documents/${adrDocumentId}.zip` : `adr-documents/${adrDocumentId}.zip`;
 
   console.info(`Bucket name: ${bucket}`);
   console.info(`Item key: ${key}`);

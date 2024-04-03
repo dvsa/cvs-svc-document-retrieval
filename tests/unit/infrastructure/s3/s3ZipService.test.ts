@@ -40,7 +40,7 @@ describe('S3 Zip Service', () => {
     const firstCall = mockGetsignedUrl.mock.calls[0];
     expect(firstCall[1].input).toEqual({
       Bucket: bucket,
-      Key: `/adr-documents/${adrDocumentId}.zip`,
+      Key: `adr-documents/${adrDocumentId}.zip`,
     });
   });
 

@@ -1,7 +1,8 @@
 /* eslint-disable  @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-base-to-string */
 
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { AWSError, S3 } from 'aws-sdk';
+import { ServiceException } from '@smithy/smithy-client';
+import { S3Client } from '@aws-sdk/client-s3';
 import FileNameError from '../errors/FileNameError';
 import IncorrectFileTypeError from '../errors/IncorrectFileTypeError';
 import MissingBucketNameError from '../errors/MissingBucketNameError';
@@ -10,13 +11,13 @@ import NoBodyError from '../errors/NoBodyError';
 import getObjectFromS3 from '../infrastructure/s3/s3ZipService';
 import ZipDetails from '../interfaces/ZipDetails';
 
-function isAWSError(error: Error | AWSError): error is AWSError {
-  return Object.prototype.hasOwnProperty.call(error, 'code') as boolean;
+function isAWSError(error: Error | ServiceException): error is ServiceException {
+  return Object.prototype.hasOwnProperty.call(error, 'name') as boolean;
 }
 
 export default async (
   event: ZipDetails,
-  s3: S3,
+  s3: S3Client,
   bucketName: string | undefined,
   folder: string | undefined,
   currentEnvironment: string | undefined,
@@ -37,7 +38,6 @@ export default async (
 
     // This is actually a unsigned URL that can be used to retrieve the file contents
     const file = await getObjectFromS3(s3, bucketName, folder, event.adrDocumentId);
-    const response = file.toString('base64');
 
     const headers = {
       'Content-type': 'application/json',
@@ -51,7 +51,7 @@ export default async (
     return {
       headers,
       statusCode: 200,
-      body: response,
+      body: file,
       isBase64Encoded: true,
     };
   } catch (e) {
@@ -75,12 +75,12 @@ export default async (
 
     if (isAWSError(e)) {
       // S3 error that the key does not exist
-      if (['NoSuchKey'].includes(e.code)) {
+      if (['NoSuchKey'].includes(e.name)) {
         code = 404;
       }
 
       // Any other AWS errors we get will always be a 500 because it will be an error on our part.
-      message = e.code;
+      message = e.name;
     }
 
     console.error(code);

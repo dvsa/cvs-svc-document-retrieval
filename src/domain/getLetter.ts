@@ -1,6 +1,5 @@
-/* eslint-disable  @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-base-to-string */
-
-import { S3, AWSError } from 'aws-sdk';
+import { ServiceException } from '@smithy/smithy-client';
+import { S3Client } from '@aws-sdk/client-s3';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import LetterDetails from '../interfaces/LetterDetails';
 import getObjectFromS3 from '../infrastructure/s3/s3LetterService';
@@ -12,13 +11,13 @@ import IncorrectFileTypeError from '../errors/IncorrectFileTypeError';
 import MissingFolderNameError from '../errors/MissingFolderNameError';
 import SystemNumberError from '../errors/SystemNumberError';
 
-function isAWSError(error: Error | AWSError): error is AWSError {
-  return Object.prototype.hasOwnProperty.call(error, 'code') as boolean;
+function isAWSError(error: Error | ServiceException): error is ServiceException {
+  return Object.prototype.hasOwnProperty.call(error, 'name') as boolean;
 }
 
 export default async (
   event: LetterDetails,
-  s3: S3,
+  s3: S3Client,
   bucketName: string | undefined,
   folder: string | undefined,
   currentEnvironment: string | undefined,
@@ -35,7 +34,7 @@ export default async (
     validate(event);
 
     const file = await getObjectFromS3(s3, bucketName, folder, event.systemNumber, event.vin);
-    const response = file.toString('base64');
+    const response = await file.transformToString('base64');
 
     const headers = {
       'Content-type': 'application/pdf',
@@ -71,14 +70,15 @@ export default async (
       message = e.message;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     if (isAWSError(e)) {
       // S3 error that the key does not exist
-      if (['NoSuchKey'].includes(e.code)) {
+      if (['NoSuchKey'].includes(e.name)) {
         code = 404;
       }
 
       // Any other AWS errors we get will always be a 500 because it will be an error on our part.
-      message = e.code;
+      message = e.name;
     }
 
     console.error(code);

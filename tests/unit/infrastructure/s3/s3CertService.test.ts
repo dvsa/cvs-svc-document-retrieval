@@ -1,5 +1,7 @@
-/* eslint-disable  @typescript-eslint/no-unsafe-argument */
-import { S3 } from 'aws-sdk';
+import { Readable } from 'stream';
+import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { sdkStreamMixin } from '@smithy/util-stream';
+import { mockClient } from 'aws-sdk-client-mock';
 import getFromS3 from '../../../../src/infrastructure/s3/s3CertService';
 
 describe('S3 Certificate Service', () => {
@@ -8,106 +10,87 @@ describe('S3 Certificate Service', () => {
   });
 
   it('passes the expected key to getObject if folder is defined', async () => {
-    const mockS3 = ({} as unknown) as S3;
     const bucket = 'bucket';
     const folder = 'folder';
     const certNumber = 'cert123456';
     const vin = 'VIN2345AB';
-    const mockPromise = jest
-      .fn()
-      .mockResolvedValue({ Body: 'Success!', ContentType: 'application/octet-stream' });
-    const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
 
-    mockS3.getObject = mockGetObject;
-    await getFromS3(mockS3, bucket, folder, certNumber, vin).catch(() => {});
+    const mockS3Client = mockClient(S3Client);
+    const s3 = new S3Client({});
+    await getFromS3(s3, bucket, folder, certNumber, vin).catch(() => {});
 
-    const firstCall = mockGetObject.mock.calls[0] as S3.GetObjectRequest[];
-    const firstArg = firstCall[0];
+    const s3GetObjectStub = mockS3Client.commandCalls(GetObjectCommand);
 
-    expect(firstArg.Key).toBe(`${folder}/${certNumber}_${vin}.pdf`);
+    expect(s3GetObjectStub[0].args[0].input).toEqual({
+      Bucket: bucket,
+      Key: `${folder}/${certNumber}_${vin}.pdf`,
+    });
   });
 
   it('passes the expected key to getObject if folder is undefined', async () => {
-    const mockS3 = ({} as unknown) as S3;
     const bucket = 'bucket';
     const folder = undefined;
     const certNumber = 'cert123456';
     const vin = 'VIN2345AB';
-    const mockPromise = jest
-      .fn()
-      .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/octet-stream' }));
-    const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
+    const mockS3Client = mockClient(S3Client);
+    const s3 = new S3Client({});
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    await getFromS3(s3, bucket, folder, certNumber, vin).catch(() => {});
 
-    mockS3.getObject = mockGetObject;
-    await getFromS3(mockS3, bucket, folder, certNumber, vin).catch(() => {});
+    const s3GetObjectStub = mockS3Client.commandCalls(GetObjectCommand);
 
-    const firstCall = mockGetObject.mock.calls[0] as S3.GetObjectRequest[];
-    const firstArg = firstCall[0];
-
-    expect(firstArg.Key).toBe(`${certNumber}_${vin}.pdf`);
-  });
-
-  it('passes the bucket to getObject', () => {
-    const mockS3 = ({} as unknown) as S3;
-    const bucket = 'bucket';
-    const folder = 'folder';
-    const certNumber = 'cert123456';
-    const vin = 'VIN2345AB';
-    const mockPromise = jest
-      .fn()
-      .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/octet-stream' }));
-    const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
-
-    mockS3.getObject = mockGetObject;
-    getFromS3(mockS3, bucket, folder, certNumber, vin).catch(() => {});
-
-    const firstCall = mockGetObject.mock.calls[0] as S3.GetObjectRequest[];
-    const firstArg = firstCall[0];
-
-    expect(firstArg.Bucket).toEqual(bucket);
+    expect(s3GetObjectStub[0].args[0].input).toEqual({
+      Bucket: bucket,
+      Key: `${certNumber}_${vin}.pdf`,
+    });
   });
 
   it('returns the expected output', async () => {
-    const mockS3 = ({} as unknown) as S3;
     const bucket = 'bucket';
     const folder = 'folder';
     const certNumber = 'cert123456';
     const vin = 'VIN2345AB';
-    const mockPromise = jest
-      .fn()
-      .mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'application/octet-stream' }));
-    const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
+    const stream = new Readable();
+    stream.push('Success!');
+    stream.push(null);
+    const sdkStream = sdkStreamMixin(stream);
 
-    mockS3.getObject = mockGetObject;
+    const mockS3Client = mockClient(S3Client);
+    const s3 = new S3Client({});
 
-    expect(await getFromS3(mockS3, bucket, folder, certNumber, vin)).toBe('Success!');
+    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'application/octet-stream' });
+    const responseBody = await getFromS3(s3, bucket, folder, certNumber, vin);
+
+    expect(await responseBody.transformToString()).toBe('Success!');
   });
 
   it('throws an error if the response is not a PDF', async () => {
-    const mockS3 = ({} as unknown) as S3;
     const bucket = 'bucket';
     const folder = 'folder';
     const certNumber = 'cert123456';
     const vin = 'VIN2345AB';
-    const mockPromise = jest.fn().mockReturnValue(Promise.resolve({ Body: 'Success!', ContentType: 'image/jpg' }));
-    const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
+    const mockS3Client = mockClient(S3Client);
+    const s3 = new S3Client({});
 
-    mockS3.getObject = mockGetObject;
+    const stream = new Readable();
+    stream.push('Success!');
+    stream.push(null);
+    const sdkStream = sdkStreamMixin(stream);
+    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'image/jpg' });
 
-    await expect(getFromS3(mockS3, bucket, folder, certNumber, vin)).rejects.toThrow();
+    await expect(getFromS3(s3, bucket, folder, certNumber, vin)).rejects.toThrow();
   });
 
   it('throws an error if there is no body in the response', async () => {
-    const mockS3 = ({} as unknown) as S3;
     const bucket = 'bucket';
     const folder = 'folder';
     const certNumber = 'cert123456';
     const vin = 'VIN2345AB';
-    const mockPromise = jest.fn().mockReturnValue(Promise.resolve({ ContentType: 'application/octet-stream' }));
-    const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
 
-    mockS3.getObject = mockGetObject;
+    const mockS3Client = mockClient(S3Client);
+    const s3 = new S3Client({});
+    mockS3Client.on(GetObjectCommand).resolves({ ContentType: 'application/octet-stream' });
 
-    await expect(getFromS3(mockS3, bucket, folder, certNumber, vin)).rejects.toThrow();
+    await expect(getFromS3(s3, bucket, folder, certNumber, vin)).rejects.toThrow();
   });
 });

@@ -67,7 +67,7 @@ describe('S3 File Service', () => {
     const s3 = new S3Client({});
     const stream = new Readable();
     stream.push('Success!');
-    stream.push(null); // end of stream
+    stream.push(null);
     const sdkStream = sdkStreamMixin(stream);
 
     mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'image/jpg' });

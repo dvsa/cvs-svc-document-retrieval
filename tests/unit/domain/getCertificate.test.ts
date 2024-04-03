@@ -74,7 +74,7 @@ describe('getCertificate', () => {
 
     const stream = new Readable();
     stream.push('This is an image');
-    stream.push(null); // end of stream
+    stream.push(null);
     const sdkStream = sdkStreamMixin(stream);
 
     mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'image/jpg' });
@@ -128,7 +128,7 @@ describe('getCertificate', () => {
 
     const stream = new Readable();
     stream.push('Certificate Content');
-    stream.push(null); // end of stream
+    stream.push(null);
     const sdkStream = sdkStreamMixin(stream);
     const body = Buffer.from('Certificate Content');
 
@@ -145,19 +145,12 @@ describe('getCertificate', () => {
   });
 
   it('ignores the folder check if the current environment is "local". Required for local testing', async () => {
-    // const mockS3 = ({} as unknown) as S3;
-    // const mockPromise = jest
-    //   .fn()
-    //   .mockReturnValue(Promise.resolve({ Body: 'Certificate Content', ContentType: 'application/octet-stream' }));
-    // const mockGetObject = jest.fn().mockReturnValue({ promise: mockPromise });
-
-    // mockS3.getObject = mockGetObject;
     const mockS3Client = mockClient(S3Client);
     const s3 = new S3Client({});
 
     const stream = new Readable();
     stream.push('Certificate Content');
-    stream.push(null); // end of stream
+    stream.push(null);
     const sdkStream = sdkStreamMixin(stream);
     const body = Buffer.from('Certificate Content');
 

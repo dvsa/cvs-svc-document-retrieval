@@ -59,7 +59,7 @@ describe('getFile', () => {
 
     const stream = new Readable();
     stream.push('This is an image');
-    stream.push(null); // end of stream
+    stream.push(null);
     const sdkStream = sdkStreamMixin(stream);
 
     mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'image/jpg' });
@@ -129,7 +129,7 @@ describe('getFile', () => {
 
     const stream = new Readable();
     stream.push('File Content');
-    stream.push(null); // end of stream
+    stream.push(null);
     const sdkStream = sdkStreamMixin(stream);
     const body = Buffer.from('File Content');
     mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'application/octet-stream' });

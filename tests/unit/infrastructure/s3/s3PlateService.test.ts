@@ -19,7 +19,6 @@ describe('S3 Plate Service', () => {
 
     const s3GetObjectStub = mockS3Client.commandCalls(GetObjectCommand);
 
-    // s3GetObjectStub[0] here refers to the first call of GetObjectCommand
     expect(s3GetObjectStub[0].args[0].input).toEqual({
       Bucket: bucket,
       Key: `${folder}/${plateSerialNumber}.pdf`,
@@ -37,7 +36,6 @@ describe('S3 Plate Service', () => {
 
     const s3GetObjectStub = mockS3Client.commandCalls(GetObjectCommand);
 
-    // s3GetObjectStub[0] here refers to the first call of GetObjectCommand
     expect(s3GetObjectStub[0].args[0].input).toEqual({
       Bucket: bucket,
       Key: `${plateSerialNumber}.pdf`,
@@ -51,7 +49,7 @@ describe('S3 Plate Service', () => {
 
     const stream = new Readable();
     stream.push('Success!');
-    stream.push(null); // end of stream
+    stream.push(null);
     const sdkStream = sdkStreamMixin(stream);
 
     const mockS3Client = mockClient(S3Client);
@@ -73,7 +71,7 @@ describe('S3 Plate Service', () => {
 
     const stream = new Readable();
     stream.push('Success!');
-    stream.push(null); // end of stream
+    stream.push(null);
     const sdkStream = sdkStreamMixin(stream);
 
     mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'image/jpg' });

@@ -1,14 +1,15 @@
-import { Readable } from 'stream';
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { mockClient } from 'aws-sdk-client-mock';
+import { StreamingBlobPayloadOutputTypes } from '@smithy/types/dist-types/streaming-payload/streaming-blob-payload-output-types';
 import { sdkStreamMixin } from '@smithy/util-stream';
-import MissingBucketNameError from '../../../src/errors/MissingBucketNameError';
-import PlateSerialNumberError from '../../../src/errors/PlateSerialNumberError';
-import NoBodyError from '../../../src/errors/NoBodyError';
-import PlateDetails from '../../../src/interfaces/PlateDetails';
+import { mockClient } from 'aws-sdk-client-mock';
+import { Readable } from 'stream';
 import getPlate from '../../../src/domain/getPlate';
 import IncorrectFileTypeError from '../../../src/errors/IncorrectFileTypeError';
+import MissingBucketNameError from '../../../src/errors/MissingBucketNameError';
 import MissingFolderNameError from '../../../src/errors/MissingFolderNameError';
+import NoBodyError from '../../../src/errors/NoBodyError';
+import PlateSerialNumberError from '../../../src/errors/PlateSerialNumberError';
+import PlateDetails from '../../../src/interfaces/PlateDetails';
 
 describe('getPlate', () => {
   it('returns an internal server error if the bucket is undefined', async () => {
@@ -62,7 +63,7 @@ describe('getPlate', () => {
     stream.push(null);
     const sdkStream = sdkStreamMixin(stream);
 
-    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'image/jpg' });
+    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream as StreamingBlobPayloadOutputTypes, ContentType: 'image/jpg' });
 
     const event: PlateDetails = {
       plateSerialNumber: 'plate_123456',
@@ -114,7 +115,7 @@ describe('getPlate', () => {
     const sdkStream = sdkStreamMixin(stream);
     const body = Buffer.from('Plate Content');
 
-    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'application/octet-stream' });
+    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream as StreamingBlobPayloadOutputTypes, ContentType: 'application/octet-stream' });
 
     const event: PlateDetails = {
       plateSerialNumber: 'plate_123456',
@@ -135,7 +136,7 @@ describe('getPlate', () => {
     const sdkStream = sdkStreamMixin(stream);
     const body = Buffer.from('Plate Content');
 
-    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'application/octet-stream' });
+    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream as StreamingBlobPayloadOutputTypes, ContentType: 'application/octet-stream' });
 
     const event: PlateDetails = {
       plateSerialNumber: 'plate_123456',

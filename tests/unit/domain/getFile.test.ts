@@ -1,14 +1,15 @@
-import { Readable } from 'stream';
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { mockClient } from 'aws-sdk-client-mock';
+import { StreamingBlobPayloadOutputTypes } from '@smithy/types/dist-types/streaming-payload/streaming-blob-payload-output-types';
 import { sdkStreamMixin } from '@smithy/util-stream';
-import MissingBucketNameError from '../../../src/errors/MissingBucketNameError';
-import NoBodyError from '../../../src/errors/NoBodyError';
-import IncorrectFileTypeError from '../../../src/errors/IncorrectFileTypeError';
-import MissingFolderNameError from '../../../src/errors/MissingFolderNameError';
-import FileDetails from '../../../src/interfaces/FileDetails';
+import { mockClient } from 'aws-sdk-client-mock';
+import { Readable } from 'stream';
 import getFile from '../../../src/domain/getFile';
 import FileNameError from '../../../src/errors/FileNameError';
+import IncorrectFileTypeError from '../../../src/errors/IncorrectFileTypeError';
+import MissingBucketNameError from '../../../src/errors/MissingBucketNameError';
+import MissingFolderNameError from '../../../src/errors/MissingFolderNameError';
+import NoBodyError from '../../../src/errors/NoBodyError';
+import FileDetails from '../../../src/interfaces/FileDetails';
 
 describe('getFile', () => {
   it('returns an internal server error if the bucket is undefined', async () => {
@@ -62,7 +63,7 @@ describe('getFile', () => {
     stream.push(null);
     const sdkStream = sdkStreamMixin(stream);
 
-    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'image/jpg' });
+    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream as StreamingBlobPayloadOutputTypes, ContentType: 'image/jpg' });
 
     const event: FileDetails = {
       fileName: 'adr_pass_123_2024-01-22T11:48:16.035Z',
@@ -112,7 +113,7 @@ describe('getFile', () => {
 
     const body = Buffer.from('File Content');
 
-    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'application/octet-stream' });
+    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream as StreamingBlobPayloadOutputTypes, ContentType: 'application/octet-stream' });
 
     const event: FileDetails = {
       fileName: 'adr_pass_123_2024-01-22T11:48:16.035Z',
@@ -132,7 +133,7 @@ describe('getFile', () => {
     stream.push(null);
     const sdkStream = sdkStreamMixin(stream);
     const body = Buffer.from('File Content');
-    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'application/octet-stream' });
+    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream as StreamingBlobPayloadOutputTypes, ContentType: 'application/octet-stream' });
 
     const event: FileDetails = {
       fileName: 'adr_pass_123_2024-01-22T11:48:16.035Z',

@@ -1,7 +1,8 @@
-import { Readable } from 'stream';
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { StreamingBlobPayloadOutputTypes } from '@smithy/types/dist-types/streaming-payload/streaming-blob-payload-output-types';
 import { sdkStreamMixin } from '@smithy/util-stream';
 import { mockClient } from 'aws-sdk-client-mock';
+import { Readable } from 'stream';
 import getFromS3 from '../../../../src/infrastructure/s3/s3CertService';
 
 describe('S3 Certificate Service', () => {
@@ -58,7 +59,7 @@ describe('S3 Certificate Service', () => {
     const mockS3Client = mockClient(S3Client);
     const s3 = new S3Client({});
 
-    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'application/octet-stream' });
+    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream as StreamingBlobPayloadOutputTypes, ContentType: 'application/octet-stream' });
     const responseBody = await getFromS3(s3, bucket, folder, certNumber, vin);
 
     expect(await responseBody.transformToString()).toBe('Success!');
@@ -76,7 +77,7 @@ describe('S3 Certificate Service', () => {
     stream.push('Success!');
     stream.push(null);
     const sdkStream = sdkStreamMixin(stream);
-    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'image/jpg' });
+    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream as StreamingBlobPayloadOutputTypes, ContentType: 'image/jpg' });
 
     await expect(getFromS3(s3, bucket, folder, certNumber, vin)).rejects.toThrow();
   });

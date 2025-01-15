@@ -1,15 +1,16 @@
-import { Readable } from 'stream';
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { mockClient } from 'aws-sdk-client-mock';
+import { StreamingBlobPayloadOutputTypes } from '@smithy/types/dist-types/streaming-payload/streaming-blob-payload-output-types';
 import { sdkStreamMixin } from '@smithy/util-stream';
+import { mockClient } from 'aws-sdk-client-mock';
+import { Readable } from 'stream';
+import getLetter from '../../../src/domain/getLetter';
+import IncorrectFileTypeError from '../../../src/errors/IncorrectFileTypeError';
 import MissingBucketNameError from '../../../src/errors/MissingBucketNameError';
+import MissingFolderNameError from '../../../src/errors/MissingFolderNameError';
 import NoBodyError from '../../../src/errors/NoBodyError';
+import SystemNumberError from '../../../src/errors/SystemNumberError';
 import VinError from '../../../src/errors/VinError';
 import LetterDetails from '../../../src/interfaces/LetterDetails';
-import IncorrectFileTypeError from '../../../src/errors/IncorrectFileTypeError';
-import MissingFolderNameError from '../../../src/errors/MissingFolderNameError';
-import getLetter from '../../../src/domain/getLetter';
-import SystemNumberError from '../../../src/errors/SystemNumberError';
 
 describe('getLetter', () => {
   it('returns an internal server error if the bucket is undefined', async () => {
@@ -77,7 +78,7 @@ describe('getLetter', () => {
     stream.push(null);
     const sdkStream = sdkStreamMixin(stream);
 
-    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'image/jpg' });
+    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream as StreamingBlobPayloadOutputTypes, ContentType: 'image/jpg' });
 
     const event: LetterDetails = {
       systemNumber: '123456',
@@ -132,7 +133,7 @@ describe('getLetter', () => {
     const sdkStream = sdkStreamMixin(stream);
     const body = Buffer.from('Letter Content');
 
-    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'application/octet-stream' });
+    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream as StreamingBlobPayloadOutputTypes, ContentType: 'application/octet-stream' });
 
     const event: LetterDetails = {
       systemNumber: '123456',
@@ -154,7 +155,7 @@ describe('getLetter', () => {
     const sdkStream = sdkStreamMixin(stream);
     const body = Buffer.from('Letter Content');
 
-    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'application/octet-stream' });
+    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream as StreamingBlobPayloadOutputTypes, ContentType: 'application/octet-stream' });
 
     const event: LetterDetails = {
       systemNumber: '123456',

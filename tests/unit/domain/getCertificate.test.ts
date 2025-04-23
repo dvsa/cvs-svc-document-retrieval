@@ -1,15 +1,16 @@
-import { Readable } from 'stream';
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { mockClient } from 'aws-sdk-client-mock';
+import { StreamingBlobPayloadOutputTypes } from '@smithy/types/dist-types/streaming-payload/streaming-blob-payload-output-types';
 import { sdkStreamMixin } from '@smithy/util-stream';
-import TestNumberError from '../../../src/errors/TestNumberError';
-import MissingBucketNameError from '../../../src/errors/MissingBucketNameError';
-import NoBodyError from '../../../src/errors/NoBodyError';
-import VinError from '../../../src/errors/VinError';
-import CertificateDetails from '../../../src/interfaces/CertificateDetails';
+import { mockClient } from 'aws-sdk-client-mock';
+import { Readable } from 'stream';
 import getCertificate from '../../../src/domain/getCertificate';
 import IncorrectFileTypeError from '../../../src/errors/IncorrectFileTypeError';
+import MissingBucketNameError from '../../../src/errors/MissingBucketNameError';
 import MissingFolderNameError from '../../../src/errors/MissingFolderNameError';
+import NoBodyError from '../../../src/errors/NoBodyError';
+import TestNumberError from '../../../src/errors/TestNumberError';
+import VinError from '../../../src/errors/VinError';
+import CertificateDetails from '../../../src/interfaces/CertificateDetails';
 
 describe('getCertificate', () => {
   it('returns an internal server error if the bucket is undefined', async () => {
@@ -77,7 +78,7 @@ describe('getCertificate', () => {
     stream.push(null);
     const sdkStream = sdkStreamMixin(stream);
 
-    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'image/jpg' });
+    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream as StreamingBlobPayloadOutputTypes, ContentType: 'image/jpg' });
 
     const event: CertificateDetails = {
       testNumber: 'W10I02544',
@@ -132,7 +133,7 @@ describe('getCertificate', () => {
     const sdkStream = sdkStreamMixin(stream);
     const body = Buffer.from('Certificate Content');
 
-    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'application/octet-stream' });
+    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream as StreamingBlobPayloadOutputTypes, ContentType: 'application/octet-stream' });
 
     const event: CertificateDetails = {
       testNumber: 'W10I02544',
@@ -154,7 +155,7 @@ describe('getCertificate', () => {
     const sdkStream = sdkStreamMixin(stream);
     const body = Buffer.from('Certificate Content');
 
-    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream, ContentType: 'application/octet-stream' });
+    mockS3Client.on(GetObjectCommand).resolves({ Body: sdkStream as StreamingBlobPayloadOutputTypes, ContentType: 'application/octet-stream' });
 
     const event: CertificateDetails = {
       testNumber: 'W10I02544',
